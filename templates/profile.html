@@ -1,0 +1,55 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+{% load static %}
+
+
+{% block title %}{% trans "Home" %}{% endblock title %}
+
+{% block stylesheets %}
+    {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="right_col" role="main" style="min-height: 936px">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+{#            <div class="x_panel">#}
+            <div class="x_title">
+                <h2>{% trans 'Patients' %}
+                </h2>
+{#              <ul class="nav navbar-right panel_toolbox">#}
+{#                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>#}
+{#                </li>#}
+{#              </ul>#}
+              <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <table id="datatable" class="table table-striped table-bordered" style="border-collapse: collapse; border-spacing: 0;">
+                <thead>
+                  <tr>
+                      <th style="">{% trans 'Photo' %}</th>
+                      <th>{% trans 'Name' %}</th>
+                      <th>{% trans 'Id' %}</th>
+                      <th>{% trans 'Delete' %}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients %}
+                        <tr>
+                            <td style="width: 30%"><a href="{% url "search_users" patient_id=patient.id %}"><img src="/images/{{ patient.photo }}" alt="{{ patient.name }}" class="profile_pic"></a></td>
+{#                            <td class="profile_pic"><a><img src="/images/{{ patient.photo }}" alt="{{ patient.name }}" class="img-circle profile_pic"></a></td>#}
+                            <td>{{ patient.name }}</td>
+                            <td>{{ patient.id }}</td>
+                            <td><a href="{% url "remove_patient" patient_id=patient.id %}"><i class="glyphicon glyphicon-minus-sign"></i></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+            </div>
+            </div>
+        </div>
+{% endblock content %}
+
+{% block javascripts %}
+
+    {{ block.super }}
+{% endblock javascripts %}

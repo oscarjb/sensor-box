@@ -1,0 +1,177 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+{% load static %}
+
+
+{% block title %}{% trans "Test overview" %}{% endblock title %}
+
+{% block stylesheets %}
+    {{ block.super }}
+    <link href="/static/css/magnific-popup.css" rel="stylesheet">
+{% endblock stylesheets %}
+
+{% block content %}
+
+
+        <div class="right_col" role="main" style="min-height: 936px">
+              <div class="">
+                <div class="page-title">
+                  <div class="title_left">
+                    <h3> Test Overview </h3>
+                  </div>
+                </div>
+
+                <div class="clearfix"></div>
+
+                <div class="col-md-12 col-sm-12">
+                    <div class="x_panel">
+                      <div class="x_title">
+                        <h2>Line graph<small>Sessions</small></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                          <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                          </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                      </div>
+                      <div class="x_content">
+                            <canvas id="mychart"></canvas>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="clearfix"></div>
+                  <h2>{% trans "Distance cameras" %} {{ test.distance }}</h2>
+                <div class="row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <div class="x_content">
+                          <div class="col-md-55">
+                                <div class="thumbnail">
+                                  <div class="image view view-first">
+{#                                    <img style="width: 100%; display: block;" src="/images/{{ test.camera_kurokesu }}" alt="image" />#}
+                                      <a class="image-link" href="/images/{{ test.camera_kurokesu }}">
+                                      <img src="/images/{{ test.camera_kurokesu }}"></a>
+                                  </div>
+                                  <div class="caption">
+                                    <p><strong>Left camera</strong>
+                                    </p>
+                                  </div>
+                                </div>
+                          </div>
+
+                            <div class="col-md-55">
+                                <div class="thumbnail">
+                                  <div class="image view view-first">
+{#                                    <img style="width: 100%; display: block;" src="/images/{{ test.camera_rasp }}" alt="image" />#}
+                                      <a class="image-link" href="/images/{{ test.camera_rasp }}">
+                                      <img src="/images/{{ test.camera_rasp }}"></a>
+                                  </div>
+                                  <div class="caption">
+                                    <p><strong>Right camera</strong>
+                                    </p>
+                                  </div>
+                                </div>
+                          </div>
+
+                            <div class="col-md-55">
+                                <div class="thumbnail">
+                                  <div class="image view view-first">
+{#                                    <img style="width: 100%; display: block;" src="/images/{{ test.thermal_camera }}" alt="image" />#}
+                                    <a class="image-link" href="/images/{{ test.thermal_camera }}">
+                                      <img src="/images/{{ test.thermal_camera }}"></a>
+                                  </div>
+                                  <div class="caption">
+                                    <p><strong>Thermal camera</strong>
+                                    </p>
+                                  </div>
+                                </div>
+                          </div>
+                        </div>
+                    </div>
+                </div>
+          </div>
+    </div>
+{#    <a class="image-link" href="https://cdn.shopify.com/s/files/1/2018/8867/files/matteo-paganelli-39971_800x.jpg"><img src="https://cdn.shopify.com/s/files/1/2018/8867/files/matteo-paganelli-39971_200x.jpg"></a>#}
+
+    <script src="/static/vendors/Chart.js/dist/Chart.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/static/js/jquery.magnific-popup.js"></script>
+        <script>
+
+            function dynamicColors() {
+                var r = Math.floor(Math.random() * 255);
+                var g = Math.floor(Math.random() * 255);
+                var b = Math.floor(Math.random() * 255);
+                return "rgba(" + r + "," + g + "," + b + ", 1)";
+            }
+
+            function poolColors(a) {
+                var pool = [];
+                for(i = 0; i < a; i++) {
+                    pool.push(dynamicColors());
+                }
+                return pool;
+            }
+
+            var ctx = document.getElementById('mychart').getContext('2d');
+            var chart = new Chart(ctx, {
+                type: 'line',
+                responsive: true,
+                data: {
+                    datasets: [
+                    {% for key, value in data_test.items %}
+                        {
+                            label: '{{ key }}',
+                            data: {{value}},
+                            backgroundColor: poolColors(1),
+                            borderColor: poolColors(1),
+                            fill: false
+                            {#borderColor: "rgba(247, 191, 190, 1)"#}
+                        },
+                    {% endfor %}
+                    ],
+                    labels: {{label}}
+                },
+                options: {
+                    scales: {
+                        xAxes: [{
+                             ticks: {
+                                 maxTicksLimit: 15,
+                                 maxRotation: 50,
+                                 minRotation: 50
+                             },
+                             scaleLabel: {
+                                 display: true,
+                                 labelString: '{% trans 'Index' %}'
+                             }
+                         }],
+                        yAxes: [{
+                            ticks: {
+                                suggestedMin: 0,
+                                suggestedMax: 3
+                            },
+                            scaleLabel: {
+                                 display: true,
+                                 labelString: '{% trans 'Concentration (ppm)' %}'
+                             }
+                        }]
+                    }
+                }
+            });
+        </script>
+    <script>
+        $(document).ready(function($) {
+          $('.image-link').magnificPopup({type:'image'});
+        });
+    </script>
+
+
+
+
+
+
+{% endblock content %}
+
+{% block javascripts %}
+
+    {{ block.super }}
+{% endblock javascripts %}

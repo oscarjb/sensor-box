@@ -1,0 +1,126 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+{% load static %}
+
+
+{% block title %}{% trans "Edit User" %}{% endblock title %}
+
+{% block stylesheets %}
+    {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="right_col" role="main">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                      <h2>{% trans 'Modify user' %}
+                          <small></small>
+                      </h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                      <form action="{% url "edit_user" %}" enctype="multipart/form-data" method="post" class="form-horizontal form-label-left">{% csrf_token %}
+                          <div class="item form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                     for="id_user-first_name">{% trans 'Name' %}
+                                 </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                        <input id="id_user-first_name" type="text" name="user-first_name" maxlength="100" required="required" data-validate-length-range="2,15" class="form-control col-md-7 col-xs-12" value="{{ profile.user.first_name }}"/>
+                                </div>
+                          </div>
+                          <br>
+
+                          <div class="item form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                     for="id_user-last_name">{% trans 'Surname' %}
+                                 </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                        <input id="id_user-last_name" type="text" name="user-last_name" maxlength="100" required="required" data-validate-length-range="2,15" class="form-control col-md-7 col-xs-12" value="{{ profile.user.last_name }}"/>
+                                </div>
+                          </div>
+                          <br>
+                          <div class="item form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_user-username">Username
+                                 </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                        <input id="id_user-username" type="text" name="user-username" maxlength="100" required="required" data-validate-length-range="2,15" class="form-control col-md-7 col-xs-12" value="{{ profile.user.username }}"/>
+                                </div>
+                          </div>
+                          <br>
+                          <div class="item form-group">
+                                <label class="control-label col-md-3 col-sm-3 col-xs-12" for="id_user-email">Email
+                                 </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                        <input id="id_user-email" type="email" name="user-email" maxlength="100" required="required" data-validate-length-range="2,15" class="form-control col-md-7 col-xs-12" value="{{ profile.user.email }}"/>
+                                </div>
+                          </div>
+                          <br>
+                          <div class="item form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                     for="id_user-password1">{% trans 'Password' %}<span class="required">*</span>
+                                 </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                    <input id="id_user-password1" type="password" name="user-password1" maxlength="100"
+                                           required="required" class="form-control col-md-7 col-xs-12"
+                                           placeholder="{% trans 'Repeat password' %}"/>
+                                </div>
+                          </div>
+                          <br><div class="item form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                     for="id_user-password2">{% trans 'Password' %}<span
+                                      class="required">*</span>
+                                 </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                    <input id="id_user-password2" type="password" name="user-password2" maxlength="100"
+                                           required="required" class="form-control col-md-7 col-xs-12"
+                                           placeholder="{% trans 'Repeat Password' %}"/>
+                                </div>
+                          </div>
+                          <br>
+
+                          <br><div class="item form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                     for="id_doctor-pin">{% trans 'Pin' %}
+                                 </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                    <input id="id_doctor-pin" type="text" name="doctor-pin" maxlength="6"
+                                           required="required" class="form-control col-md-7 col-xs-12"
+                                           placeholder="{{profile.pin}}"/>
+                                </div>
+                          </div>
+                          <br>
+{##}
+                          <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                     for="id_doctor-avatar">{% trans 'Avatar' %}
+                                 </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                        <input id="id_doctor-avatar" type="file" name="doctor-avatar" value="{{ profile.avatar }}"/>
+                                </div>
+                          </div>
+                          <br>
+
+                          <div class="form-group" align="left">
+                              <div >
+                                  <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-save"></i>
+                                      &nbsp; {% trans 'Save' %}</button>
+                              </div>
+                          </div>
+
+                      </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block javascripts %}
+
+    {{ block.super }}
+{% endblock javascripts %}

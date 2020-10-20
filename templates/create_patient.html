@@ -1,0 +1,112 @@
+{% extends "base_site.html" %}
+{% load i18n %}
+{% load static %}
+
+
+{% block title %}{% trans "Create Patient" %}{% endblock title %}
+
+{% block stylesheets %}
+    {{ block.super }}
+{% endblock stylesheets %}
+
+{% block content %}
+    <div class="right_col" role="main">
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                      <h2>{% trans 'Create patient' %}
+                          <small></small>
+                      </h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                    </ul>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div class="x_content">
+                    <br />
+                        <form action="{% url "create_patient" %}" enctype="multipart/form-data" method="post" class="form-horizontal form-label-left">{% csrf_token %}
+                          <div class="item form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                     for="id_name">{% trans 'Name' %} <span class="required">*</span>
+                                 </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                    <input id="id_name" type="text" name="name" maxlength="100"
+                                           class="form-control col-md-7 col-xs-12"
+                                           placeholder="{% trans 'Introduce a name' %}" required="required"
+                                           data-validate-length-range="2,100"/>
+                                </div>
+                          </div>
+                          <br>
+
+                          <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{% trans 'Gender' %}<span
+                                      class="required">*</span>
+                                </label>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                      <div id="gender" class="btn-group" data-toggle="buttons">
+                                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                            <input type="radio" name="gender" value="Hombre"><i
+                                                class="fa fa-male fa-fw"></i> {% trans 'Male' %}
+                                        </label>
+                                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                            <input type="radio" name="gender" value="Mujer"><i
+                                                class="fa fa-female fa-fw"></i> {% trans 'Female' %}
+                                        </label>
+                                        <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
+                                            <input type="radio" name="gender" value="Other"><i
+                                                class="fa fa-cube fa-fw"></i> {% trans 'Other' %}
+                                        </label>
+                                      </div>
+                                </div>
+                          </div>
+                          <br>
+
+                          <div class="item form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12">{% trans 'Birth date' %}
+                                  <span>*</span>
+                                 </label>
+                                <div class="col-md-1 col-sm-6 col-xs-12">
+                                    <input id="id_day" type="text" name="day" maxlength="100"
+                                           class="form-control col-md-1 col-xs-12" placeholder="{% trans 'Day' %}"
+                                           required="required"/>
+                                </div>
+                                <div class="col-md-1 col-sm-6 col-xs-12">
+                                    <input id="id_month" type="text" name="month" maxlength="100"
+                                           class="form-control col-md-1 col-xs-12" placeholder="{% trans 'Month' %}"/>
+                                 </div>
+                                <div class="col-md-1 col-sm-6 col-xs-12">
+                                    <input id="id_year" type="text" name="year" maxlength="100"
+                                           class="form-control col-md-1 col-xs-12" placeholder="{% trans 'Year' %}"/>
+                                </div>
+                          </div>
+                          <br>
+
+                          <div class="form-group">
+                              <label class="control-label col-md-3 col-sm-3 col-xs-12"
+                                     for="id_photo">{% trans 'Photo' %}
+                                 </label>
+                                <div class="col-md-5 col-sm-6 col-xs-12">
+                                        <input id="id_photo" type="file" name="photo"/>
+                                </div>
+                          </div>
+                          <br>
+
+                          <div class="form-group" align="left">
+                              <div >
+                                  <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-save"></i>
+                                      &nbsp; {% trans 'Create' %}</button>
+                              </div>
+                          </div>
+
+                      </form>
+                  </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+{% block javascripts %}
+
+    {{ block.super }}
+{% endblock javascripts %}
