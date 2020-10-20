@@ -1,3 +1,4 @@
 /venv/
 /.idea/
-/sensor-box
+sensor-box/
+*.sqlite3
