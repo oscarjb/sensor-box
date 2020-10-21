@@ -52,6 +52,9 @@ class Test(models.Model):
     user = models.ForeignKey(Doctor, null=True, blank=True, on_delete=models.CASCADE)
     opciones = (("Positive", "Positive"), ("Negative", "Negative"))
     outcome = models.CharField(max_length=10, choices=opciones, default="Negative")
-
+    TissueTypes = models.CharField(max_length=20, choices=opciones, default="None")
+    Ruler = models.CharField(max_length=10, choices=opciones, default="No")
+    
+    
     def __str__(self):
         return str(self.date)

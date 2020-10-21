@@ -22,6 +22,8 @@
                       <tr>
                           <th style="">{% trans 'Date' %}</th>
                           <th>{% trans 'Outcome' %}</th>
+                          <th>{% trans 'Tissue types' %}</th>
+                          <th>{% trans 'Ruler' %}</th>
                           <th>{% trans 'Delete' %}</th>
                       </tr>
                     </thead>
@@ -32,6 +34,8 @@
                                     {{ test.date.year }}/{{ test.date.month }}/{{ test.date.day }}-{{ test.date.hour }}:{{ test.date.second }}
                                 </a></td>
                                 <td>{{ test.outcome }}</td>
+                                <td>{{ test.TissueTypes }}</td>
+                                <td>{{ test.Ruler }}</td>
                                 <td><a href="{% url "remove_test" patient_id=patient.id test_id=test.id %}"><i class="glyphicon glyphicon-minus-sign"></i></a></td>
                             </tr>
                         {% endfor %}

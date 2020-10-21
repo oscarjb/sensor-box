@@ -232,6 +232,8 @@ def recieve_data(request):
                         except:
                             pass
                     if predict(ppms) == 0: test.outcome = "Positive"
+            test.TissueTypes ="None"
+            test.Ruler ="No"
             test.save()
             response['status'] = "success"
         except Exception as e:
