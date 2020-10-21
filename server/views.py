@@ -33,6 +33,7 @@ def search_users(request, patient_id):
     context['profile'] = Doctor.objects.all().get(user=request.user)
     context['patient'] = Patient.objects.all().get(id=patient_id)
     context['tests'] = Test.objects.all().filter(patient_id=patient_id)
+    print(context)
     return render(request, "patient_profile.html", context)
 
 @login_required(login_url='login_register')
@@ -234,9 +235,9 @@ def recieve_data(request):
                     if predict(ppms) == 0: test.outcome = "Positive"
             test.TissueTypes ="None"
             test.Ruler ="No"
-            test.ImageRight = "Link to Right Image"
-            test.ImageLeft = "Link to Left Image"
-            test.Imagetherm = "Link to thermal Image"
+            test.ImageRight = "Image"
+            test.ImageLeft = "Image"
+            test.Imagetherm = "Image"
             test.Perimeter = "0 mm"
             test.Area = "0 mm2"
             test.Granulation = "0 %"
