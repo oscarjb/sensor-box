@@ -54,7 +54,14 @@ class Test(models.Model):
     outcome = models.CharField(max_length=10, choices=opciones, default="Negative")
     TissueTypes = models.CharField(max_length=20, choices=opciones, default="None")
     Ruler = models.CharField(max_length=10, choices=opciones, default="No")
-    
+    ImageRight = models.CharField(max_length=20, choices=opciones, default="Link to Right Image")
+    ImageLeft = models.CharField(max_length=20, choices=opciones, default="Link to Left Image")
+    Imagetherm = models.CharField(max_length=20, choices=opciones, default="Link to thermal Image")
+    Perimeter =  models.CharField(max_length=20, choices=opciones, default="0 mm")
+    Area =  models.CharField(max_length=20, choices=opciones, default="0 mm2")
+    Granulation =  models.CharField(max_length=20, choices=opciones, default="0 %")
+    Slough =  models.CharField(max_length=20, choices=opciones, default="0 %")
+    Necrosis =  models.CharField(max_length=20, choices=opciones, default="0 %")
     
     def __str__(self):
         return str(self.date)

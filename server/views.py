@@ -234,6 +234,14 @@ def recieve_data(request):
                     if predict(ppms) == 0: test.outcome = "Positive"
             test.TissueTypes ="None"
             test.Ruler ="No"
+            test.ImageRight = "Link to Right Image"
+            test.ImageLeft = "Link to Left Image"
+            test.Imagetherm = "Link to thermal Image"
+            test.Perimeter = "0 mm"
+            test.Area = "0 mm2"
+            test.Granulation = "0 %"
+            test.Slough = "0 %"
+            test.Necrosis = "0 %"
             test.save()
             response['status'] = "success"
         except Exception as e:

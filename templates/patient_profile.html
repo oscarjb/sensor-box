@@ -22,8 +22,16 @@
                       <tr>
                           <th style="">{% trans 'Date' %}</th>
                           <th>{% trans 'Outcome' %}</th>
+                          <th>{% trans 'Right image' %}</th>
+                          <th>{% trans 'Left Image' %}</th>
+                          <th>{% trans 'Thermal image' %}</th>
                           <th>{% trans 'Tissue types' %}</th>
                           <th>{% trans 'Ruler' %}</th>
+                          <th>{% trans 'Perimeter' %}</th>
+                          <th>{% trans 'Area' %}</th>
+                          <th>{% trans 'Granulation' %}</th>
+                          <th>{% trans 'Slough' %}</th>
+                          <th>{% trans 'Necrosis' %}</th>
                           <th>{% trans 'Delete' %}</th>
                       </tr>
                     </thead>
@@ -34,8 +42,16 @@
                                     {{ test.date.year }}/{{ test.date.month }}/{{ test.date.day }}-{{ test.date.hour }}:{{ test.date.second }}
                                 </a></td>
                                 <td>{{ test.outcome }}</td>
+                                <td>{{ test.ImageRight }}</td>
+                                <td>{{ test.ImageLeft }}</td>
+                                <td>{{ test.Imagetherm }}</td>
                                 <td>{{ test.TissueTypes }}</td>
                                 <td>{{ test.Ruler }}</td>
+                                <td>{{ test.Perimeter }}</td>
+                                <td>{{ test.Area }}</td>
+                                <td>{{ test.Granulation }}</td>
+                                <td>{{ test.Slough }}</td>
+                                <td>{{ test.Necrosis }}</td>
                                 <td><a href="{% url "remove_test" patient_id=patient.id test_id=test.id %}"><i class="glyphicon glyphicon-minus-sign"></i></a></td>
                             </tr>
                         {% endfor %}
