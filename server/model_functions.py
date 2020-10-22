@@ -42,6 +42,9 @@ def consumer(cond, image,test):
             test.Ruler = "Yes"
         else:
             test.Ruler = "No"
+
+        
+        test.NumberUlcers = str(list(r['class_ids']).count(1))
         #test.Ruler = "No"
         test.save()
         #print(r['class_ids'])
