@@ -15,3 +15,4 @@ def pad(A, length=10000):
 def predict(sample):
     sample_pad = np.array(pad(sample))
     return int(round(model.predict(np.array([sample_pad]))[0][0]))
+    print("test")
