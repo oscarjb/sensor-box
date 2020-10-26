@@ -26,6 +26,32 @@ from UPP_Contour_RULER_2020 import balloon
 import logging
 import threading
 import time
+import imageio
+import colorsys
+from PIL import Image
+
+def random_colors(N, bright=True):
+    """
+    Generate random colors.
+    To get visually distinct colors, generate them in HSV space then
+    convert to RGB.
+    """
+    brightness = 1.0 if bright else 0.7
+    hsv = [(i / N, 1, brightness) for i in range(N)]
+    colors = list(map(lambda c: colorsys.hsv_to_rgb(*c), hsv))
+    random.shuffle(colors)
+    return colors
+
+
+def apply_masks(image, mask, alpha=0.5):
+    """Apply the given mask to the image.
+    """
+    for c in range(3):
+        image[:, :, c] = np.where(mask == 1,
+                                  image[:, :, c] *
+                                  (1 - alpha) + alpha * 255,
+                                  image[:, :, c])
+    return image
 
 
 def consumer(cond, image,test):
@@ -42,6 +68,58 @@ def consumer(cond, image,test):
             test.Ruler = "Yes"
         else:
             test.Ruler = "No"
+        colors =  random_colors(5)
+        print(colors)
+        masked_image = image.copy()
+        print(masked_image[500,500,:])
+        red = [1.0,0.0,0.0]
+        blue = [0.0,0.0,1.0]
+        print(r['masks'].shape[2])
+        #masked_image = apply_masks(masked_image, r['masks'].astype(int))
+        alpha=0.5
+
+        '''
+        masks=r['masks'][:,:,0] 
+        for i in range(1,r['masks'].shape[2]):
+            masks = masks +r['masks'][:,:,i] 
+        '''
+
+        index_upp = [] 
+        index_ruler = [] 
+        for i in range(0, len(r['class_ids'])) : 
+            if r['class_ids'][i] == 1 : 
+                index_upp.append(i)
+            if r['class_ids'][i] == 2 :
+                index_ruler.append(i)
+        masks_UPP = np.zeros((r['masks'].shape[0], r['masks'].shape[1]))
+        masks_Ruler  =np.zeros((r['masks'].shape[0], r['masks'].shape[1]))
+        print( "index upp is ", index_upp , " and index ruler is" ,masks_Ruler )
+        for i in range(len(index_upp)):
+            masks_UPP = masks_UPP +r['masks'][:,:,index_upp[i]]
+        for i in range(len(index_ruler)):
+            masks_Ruler = masks_Ruler +r['masks'][:,:,index_ruler[i]]
+
+
+        for c in range(3):
+            masked_image[:, :, c] = np.where(masks_UPP.astype(int) == 1,
+                                  masked_image[:, :, c] *
+                                  (1 - alpha) + alpha * red[c]* 255,
+                                  masked_image[:, :, c])
+            masked_image[:, :, c] = np.where(masks_Ruler.astype(int) == 1,
+                                  masked_image[:, :, c] *
+                                  (1 - alpha) + alpha * blue[c]* 255,
+                                  masked_image[:, :, c])
+        print(masked_image)
+        #plt.imshow(r['masks'].astype(int))
+        print('server/static/images/tests/'+ str(test.camera_kurokesu) + '_segmented.png')
+
+        pathn = str(test.camera_kurokesu)
+        start = pathn.find('test') + 6
+        end = pathn.find('.jpg', start)
+        pathnn = pathn[start:end]
+        print(pathnn)
+        image_store_db = imageio.imsave('server/static/images/tests/'+ pathnn + '_segmented.png', masked_image) 
+        test.Segmented_leftImage = 'tests/' + pathnn + '_segmented.png'
 
         
         test.NumberUlcers = str(list(r['class_ids']).count(1))

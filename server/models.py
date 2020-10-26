@@ -63,6 +63,6 @@ class Test(models.Model):
     Granulation =  models.CharField(max_length=20, choices=opciones, default="0 %")
     Slough =  models.CharField(max_length=20, choices=opciones, default="0 %")
     Necrosis =  models.CharField(max_length=20, choices=opciones, default="0 %")
-    
+    Segmented_leftImage = models.ImageField(blank=True)
     def __str__(self):
         return str(self.date)
