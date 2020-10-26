@@ -56,9 +56,27 @@
                                     {{ test.date.year }}/{{ test.date.month }}/{{ test.date.day }}-{{ test.date.hour }}:{{ test.date.second }}
                                 </a></td>
                                 <td>{{ test.outcome }}</td>
-                                <td>{{ test.ImageRight }}</td>
-                                <td>{{ test.ImageLeft }}</td>
-                                <td>{{ test.Imagetherm }}</td>
+                                <td>
+                                    {% if test.camera_rasp %}
+                                        <a href="/images/{{ test.camera_rasp }}">{{ test.ImageRight }}</a>
+                                    {% else %}
+                                        <strike><p>Image</p></strike>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if test.camera_kurokesu %}
+                                        <a href="/images/{{ test.camera_kurokesu }}">{{ test.ImageLeft }}</a>
+                                    {% else %}
+                                        <strike><p>Image</p></strike>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if test.thermal_camera %}
+                                        <a href="/images/{{ test.thermal_camera }}">{{ test.Imagetherm }}</a>
+                                    {% else %}
+                                        <strike><p>Image</p></strike>
+                                    {% endif %}
+                                </td>
                                 <td>{{ test.NumberUlcers }}</td>
                                 <td>{{ test.TissueTypes }}</td>
                                 <td>{{ test.Ruler }}</td>
