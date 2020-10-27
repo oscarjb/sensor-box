@@ -8,6 +8,7 @@
 {% block stylesheets %}
     {{ block.super }}
     <link href="/static/css/magnific-popup.css" rel="stylesheet">
+    <link href="/static/css/loading.css" rel="stylesheet">
 {% endblock stylesheets %}
 
 {% block content %}
@@ -20,7 +21,12 @@
                     <h3> Test Overview </h3>
                   </div>
                 </div>
-
+                
+                {% if hidden %}
+                  <div style = "visibility: hidden" class="lds-facebook"><div></div><div></div><div></div></div>
+                {% else %}
+                  <div style = "visibility: visible" class="lds-facebook"><div></div><div></div><div></div></div>
+                {% endif %}
                 <div class="clearfix"></div>
                 {% for key, value in data_test.items %}
                 <div class="col-md-6 col-sm-6">

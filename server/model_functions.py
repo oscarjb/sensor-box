@@ -27,6 +27,9 @@ import logging
 import threading
 import time
 
+from django.shortcuts import render
+from django.http import HttpResponse
+
 
 def consumer(cond, image,test):
     """wait for the condition and use the resource"""
@@ -50,7 +53,9 @@ def consumer(cond, image,test):
         #print(r['class_ids'])
         cond.wait(0.1)
         logging.debug('Resource is available to consumer')
-
+        context = {}
+        context['hidden'] = True
+        return render(request, "test_overview2.html", context)
 
 def producer(cond):
     """set up the resource to be used by the consumer"""
