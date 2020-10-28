@@ -271,8 +271,7 @@ def analyze_data(request):
     response_thread = segment(image2,test)
     print(response_thread)
     if (response_thread["status"] == "Finished"):
-        context = {"status": "Finished"}
-        return JsonResponse(context)
+        return JsonResponse(response_thread)
     else:
         context = {"status": "working"}
         return JsonResponse(context)
