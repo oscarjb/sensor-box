@@ -21,13 +21,9 @@
                     <h3> Test Overview </h3>
                   </div>
                 </div>
-                
-                {% if hidden %}
-                  <div style = "visibility: hidden" class="lds-facebook"><div></div><div></div><div></div></div>
-                {% else %}
-                  <div style = "visibility: visible" class="lds-facebook"><div></div><div></div><div></div></div>
-                {% endif %}
                 <div class="clearfix"></div>
+                <button class="btn btn-default submit" id="showContent" >Analyze Data </button>
+                <div id = "loading"  class="lds-facebook"><div></div><div></div><div></div></div>
                 {% for key, value in data_test.items %}
                 <div class="col-md-6 col-sm-6">
 {#                    <div class="x_panel">#}
@@ -99,11 +95,11 @@
           </div>
     </div>
 {#    <a class="image-link" href="https://cdn.shopify.com/s/files/1/2018/8867/files/matteo-paganelli-39971_800x.jpg"><img src="https://cdn.shopify.com/s/files/1/2018/8867/files/matteo-paganelli-39971_200x.jpg"></a>#}
-
     <script src="/static/vendors/Chart.js/dist/Chart.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="/static/js/jquery.magnific-popup.js"></script>
-        <script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
 
             function dynamicColors() {
                 var r = Math.floor(Math.random() * 255);
@@ -165,17 +161,38 @@
                 }
             });
             {% endfor %}
-        </script>
+    </script>
     <script>
         $(document).ready(function($) {
           $('.image-link').magnificPopup({type:'image'});
         });
     </script>
-
-
-
-
-
+    <script type="text/javascript">
+      $("#loading").hide();
+    </script>
+    <script type="text/javascript">
+      $(document).ready(function(){
+        $("#showContent").click(function(){
+          console.log("starting Analyze")
+          $("#loading").show();
+          $('#showContent').prop('disabled', true);
+          $.ajax({
+            url: "/ajax/analyze_data/",
+            data: {
+              'test_id': {{ test.id }}
+            },
+            dataType: 'json',
+            success: function(result){
+              console.log(result)
+              if (result.status == "Finished"){
+                $("#loading").hide();
+                $('#showContent').prop('disabled', false);
+              }
+              
+          }});
+        });
+      });
+    </script>
 
 {% endblock content %}
 

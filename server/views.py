@@ -13,6 +13,8 @@ import json
 import ast
 from .model_functions import *
 import os
+from django.http import JsonResponse
+
 
 
 
@@ -54,12 +56,6 @@ def search_tests(request, patient_id, test_id):
     data_test = {}
     print(test.camera_kurokesu)
 
-    #image2 = plt.imread('/home/evida/Documents/Sensorbox_V2/sensor-box/server/202.jpg')
-    #print(os.path.join('server/static/images/', str(test.camera_kurokesu).replace('\\', '/') ))
-    image2 = plt.imread(os.path.join('server/static/images/', str(test.camera_kurokesu).replace('\\', '/') ))
-    c = segment(image2,test)
-    
-   
     try:
         data_gas = ast.literal_eval(test.gas_sensors)
         colours = ["rgba(255, 0, 0, 0.5)", "rgba(0, 255, 0, 0.5)", "rgba(0, 0, 255, 0.5)", "rgba(255, 0, 255, 0.5)"]
@@ -266,3 +262,17 @@ def recieve_data(request):
             response['status'] = "Exception ocurred - " + str(e)
         return  JsonResponse(response)
 
+def analyze_data(request):
+    #if request.method == 'POST':
+    test_id = request.GET.get('test_id', None)
+    test = Test.objects.all().get(id=test_id)
+    print(test)
+    image2 = plt.imread(os.path.join('server/static/images/', str(test.camera_kurokesu).replace('\\', '/') ))
+    response_thread = segment(image2,test)
+    print(response_thread)
+    if (response_thread["status"] == "Finished"):
+        context = {"status": "Finished"}
+        return JsonResponse(context)
+    else:
+        context = {"status": "working"}
+        return JsonResponse(context)
