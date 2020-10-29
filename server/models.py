@@ -53,7 +53,7 @@ class Test(models.Model):
     opciones = (("Positive", "Positive"), ("Negative", "Negative"))
     outcome = models.CharField(max_length=10, choices=opciones, default="Negative")
     NumberUlcers = models.CharField(max_length=10, choices=opciones, default="0")
-    TissueTypes = models.CharField(max_length=20, choices=opciones, default="None")
+    TissueTypes = models.CharField(max_length=50, choices=opciones, default="None")
     Ruler = models.CharField(max_length=10, choices=opciones, default="No")
     ImageRight = models.CharField(max_length=20, choices=opciones, default="Image")
     ImageLeft = models.CharField(max_length=20, choices=opciones, default="Image")
@@ -64,5 +64,8 @@ class Test(models.Model):
     Slough =  models.CharField(max_length=20, choices=opciones, default="0 %")
     Necrosis =  models.CharField(max_length=20, choices=opciones, default="0 %")
     Segmented_leftImage = models.ImageField(blank=True)
+    Segmented_leftImage_g = models.ImageField(blank=True)
+    Segmented_leftImage_s = models.ImageField(blank=True)
+    Segmented_leftImage_n = models.ImageField(blank=True)
     def __str__(self):
         return str(self.date)

@@ -13,8 +13,9 @@ import json
 import ast
 from .model_functions import *
 import os
-
-
+from resizeimage import resizeimage
+import PIL 
+from PIL import Image
 
 
 
@@ -56,8 +57,11 @@ def search_tests(request, patient_id, test_id):
 
     #image2 = plt.imread('/home/evida/Documents/Sensorbox_V2/sensor-box/server/202.jpg')
     #print(os.path.join('server/static/images/', str(test.camera_kurokesu).replace('\\', '/') ))
-    image2 = plt.imread(os.path.join('server/static/images/', str(test.camera_kurokesu).replace('\\', '/') ))
-    c = segment(image2,test)
+    image2 = Image.open(os.path.join('server/static/images/', str(test.camera_kurokesu).replace('\\', '/') ))
+    width, height = image2.size
+    image2 = image2.resize((int(width/4), int(height/4)), PIL.Image.ANTIALIAS)
+
+    c = segment(np.array(image2),test)
     
    
     try:
