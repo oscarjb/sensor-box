@@ -52,6 +52,7 @@ def search_tests(request, patient_id, test_id):
     context['patient'] = Patient.objects.all().get(id=patient_id)
     test = Test.objects.all().get(id=test_id)
     context['test'] = test
+    
     data_test = {}
     print(test.camera_kurokesu)
 
