@@ -53,6 +53,9 @@ def apply_masks(image, mask, alpha=0.5):
                                   image[:, :, c])
     return image
 
+from django.shortcuts import render
+from django.http import HttpResponse
+
 
 def consumer(cond, image,test):
     """wait for the condition and use the resource"""
@@ -204,7 +207,6 @@ def consumer(cond, image,test):
         cond.wait(0.1)
         logging.debug('Resource is available to consumer')
 
-
 def producer(cond):
     """set up the resource to be used by the consumer"""
     logging.debug('Starting producer thread')
@@ -258,8 +260,10 @@ def segment(image,test):
     condition = threading.Condition()
     c1 = threading.Thread(name='c1', target=consumer,args=(condition, image, test, ))
     c1.start()
-
-    
+    c1.join()
+    response = {
+        "status" : "Finished"
+    }
     #model_maskRCNN.load_weights(os.path.join('server/static/model/mask_rcnn_type_0040.h5'), by_name=True)
     #results = model_maskRCNN.detect([image])
-    return 1
+    return response

@@ -18,6 +18,7 @@ from django.urls import path
 from server.views import *
 from Ulcers_Server import settings
 from django.conf.urls.static import static
+from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -33,5 +34,6 @@ urlpatterns = [
     path('create/', create_patient, name="create_patient"),
     path('login/', login_register, name="login_register"),
     path('api/data', recieve_data, name="recieve_data"),
-    path('api/login', login_api, name="login_api")
+    path('api/login', login_api, name="login_api"),
+    url(r'^ajax/analyze_data/$', analyze_data, name='analyze_data'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
