@@ -266,10 +266,10 @@ def analyze_data(request):
     test_id = request.GET.get('test_id', None)
     test = Test.objects.all().get(id=test_id)
     print(test)
-    image2 = plt.imread(os.path.join('server/static/images/', str(test.camera_kurokesu).replace('\\', '/') ))
+    image2 = Image.open(os.path.join('server/static/images/', str(test.camera_kurokesu).replace('\\', '/') ))
     width, height = image2.size
     image2 = image2.resize((int(width/4), int(height/4)), PIL.Image.ANTIALIAS)
-    response_thread = segment(image2,test)
+    response_thread = segment(np.array(image2),test)
     print(response_thread)
     if (response_thread["status"] == "Finished"):
         return JsonResponse(response_thread)
