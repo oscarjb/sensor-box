@@ -150,6 +150,7 @@
           </tr>
         </tbody>                                   
     </table>
+    <!--<canvas id="pie-chart" width="800" height="450"></canvas>-->
     </div>
     
     
@@ -252,7 +253,33 @@
         });
       });
     </script>
-
+    <script type="text/javascript">
+      let granulation = "{{ test.Granulation }}";
+      let slough = "{{ test.Slough }}";
+      let necrosis = "{{ test.Necrosis }}";
+          
+      
+      granulation = parseFloat(granulation.match(/[\d\.]+/))
+      slough = parseFloat(slough.match(/[\d\.]+/))
+      necrosis = parseFloat(necrosis.match(/[\d\.]+/))
+      new Chart(document.getElementById("pie-chart"), {
+        type: 'pie',
+        data: {
+          labels: ["Granulation", "Slough", "Necrosis"],
+          datasets: [{
+            label: "Tissue Types (%)",
+            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f"],
+            data: [granulation,slough,necrosis]
+          }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: 'Predicted world population (millions) in 2050'
+          }
+        }
+    });
+    </script>
 {% endblock content %}
 
 {% block javascripts %}
