@@ -9,6 +9,8 @@
     {{ block.super }}
     <link href="/static/css/magnific-popup.css" rel="stylesheet">
     <link href="/static/css/loading.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 {% endblock stylesheets %}
 
 {% block content %}
@@ -90,79 +92,87 @@
         </div>
       </div>
       <div>
-        <button class="btn btn-default submit" id="showContent" >Analyze Data </button>
+        <button class="btn btn-lg submit" id="showContent" >Analyze Data </button>
         <div id = "loading"  class="lds-facebook"><div></div><div></div><div></div></div>
       </div>
-      <table style="width: 25%" id="datatable" class="table table-striped table-bordered" style="border-collapse: collapse; border-spacing: 0;">
-        <tbody >  
-          <tr>
-            <th >Date</th>
-            <td >
-              <a href="{% url "search_tests" patient_id=patient.id test_id=test.id %}">
-                {{ test.date.year }}/{{ test.date.month }}/{{ test.date.day }}-{{ test.date.hour }}:{{ test.date.second }}
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <th>Outcome</th>
-            <td>{{ test.outcome }}</td>
-          </tr>
-          <tr>
-            <th>Number of PIs</th>
-            <td>{{ test.NumberUlcers }}</td> 
-          </tr>
-          <tr>
-            <th>Tissue types</th>
-            <td>{{ test.TissueTypes }}</td>
-          </tr>
-          <tr>
-            <th>Ruler</th>
-            <td>{{ test.Ruler }}</td>            
-          </tr>
-          <tr>
-            <th>Perimeter</th>
-            <td>{{ test.Perimeter }}</td>
-          </tr>
-          <tr>
-            <th>Area</th>
-            <td>{{ test.Area }}</td>
-          </tr>
-          <tr>
-            <th>Granulation</th>
-            <td>      
-              {% if test.Segmented_leftImage_g %}
-                  <a href="/images/{{ test.Segmented_leftImage_g }}">{{ test.Granulation }}</a>
-              {% else %}
-                  <p>None</p>
-              {% endif %}
-          </td>
-          </tr>
-          <tr>
-            <th>Slough</th>
-            <td>      
-              {% if test.Segmented_leftImage_s %}
-                  <a href="/images/{{ test.Segmented_leftImage_s }}">{{ test.Slough }}</a>
-              {% else %}
-                  <p>None</p>
-              {% endif %}
-          </td>
-          </tr>
-          <tr>
-            <th>Necrosis</th>
-            <td>      
-              {% if test.Segmented_leftImage_n %}
-                  <a href="/images/{{ test.Segmented_leftImage_n }}">{{ test.Necrosis }}</a>
-              {% else %}
-                  <p>None</p>
-              {% endif %}
-          </td>
-          </tr>
-              <th>Delete</th>
-              <td><a href="{% url "remove_test" patient_id=patient.id test_id=test.id %}"><i class="glyphicon glyphicon-minus-sign"></i></a></td>
-          </tr>
-        </tbody>                                   
-    </table>
-    <!--<canvas id="pie-chart" width="800" height="450"></canvas>-->
+      <div class="container">
+        <div class="row">
+          <div class="col-4">
+            <table style="width: 25%" id="datatable" class="table table-striped table-bordered" style="border-collapse: collapse; border-spacing: 0;">
+            <tbody >  
+              <tr>
+                <th >Date</th>
+                <td >
+                  <a href="{% url "search_tests" patient_id=patient.id test_id=test.id %}">
+                    {{ test.date.year }}/{{ test.date.month }}/{{ test.date.day }}-{{ test.date.hour }}:{{ test.date.second }}
+                  </a>
+                </td>
+              </tr>
+              <tr>
+                <th>Outcome</th>
+                <td>{{ test.outcome }}</td>
+              </tr>
+              <tr>
+                <th>Number of PIs</th>
+                <td>{{ test.NumberUlcers }}</td> 
+              </tr>
+              <tr>
+                <th>Tissue types</th>
+                <td>{{ test.TissueTypes }}</td>
+              </tr>
+              <tr>
+                <th>Ruler</th>
+                <td>{{ test.Ruler }}</td>            
+              </tr>
+              <tr>
+                <th>Perimeter</th>
+                <td>{{ test.Perimeter }}</td>
+              </tr>
+              <tr>
+                <th>Area</th>
+                <td>{{ test.Area }}</td>
+              </tr>
+              <tr>
+                <th>Granulation</th>
+                <td>      
+                  {% if test.Segmented_leftImage_g %}
+                      <a href="/images/{{ test.Segmented_leftImage_g }}">{{ test.Granulation }}</a>
+                  {% else %}
+                      <p>None</p>
+                  {% endif %}
+              </td>
+              </tr>
+              <tr>
+                <th>Slough</th>
+                <td>      
+                  {% if test.Segmented_leftImage_s %}
+                      <a href="/images/{{ test.Segmented_leftImage_s }}">{{ test.Slough }}</a>
+                  {% else %}
+                      <p>None</p>
+                  {% endif %}
+              </td>
+              </tr>
+              <tr>
+                <th>Necrosis</th>
+                <td>      
+                  {% if test.Segmented_leftImage_n %}
+                      <a href="/images/{{ test.Segmented_leftImage_n }}">{{ test.Necrosis }}</a>
+                  {% else %}
+                      <p>None</p>
+                  {% endif %}
+              </td>
+              </tr>
+                  <th>Delete</th>
+                  <td><a href="{% url "remove_test" patient_id=patient.id test_id=test.id %}"><i class="glyphicon glyphicon-minus-sign"></i></a></td>
+              </tr>
+            </tbody>                                   
+            </table>
+          </div>
+          <div class="col-8">
+            <canvas id="pie-chart" width="800" height="450"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
     
     
@@ -269,25 +279,29 @@
       let granulation = "{{ test.Granulation }}";
       let slough = "{{ test.Slough }}";
       let necrosis = "{{ test.Necrosis }}";
-          
-      
+      let rest = 0      
       granulation = parseFloat(granulation.match(/[\d\.]+/))
       slough = parseFloat(slough.match(/[\d\.]+/))
       necrosis = parseFloat(necrosis.match(/[\d\.]+/))
+      console.log("g: ", granulation, " s: ", slough, " n: ", necrosis)
+      if (granulation == 0 || necrosis == 0 || slough == 0){
+        rest = 100 - granulation -necrosis - slough; 
+      }
+
       new Chart(document.getElementById("pie-chart"), {
         type: 'pie',
         data: {
-          labels: ["Granulation", "Slough", "Necrosis"],
+          labels: ["Granulation", "Slough", "Necrosis", "Nothing"],
           datasets: [{
             label: "Tissue Types (%)",
-            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f"],
-            data: [granulation,slough,necrosis]
+            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f", "#73879C"],
+            data: [granulation,slough,necrosis, rest]
           }]
         },
         options: {
           title: {
             display: true,
-            text: 'Predicted world population (millions) in 2050'
+            text: 'Tissue Types'
           }
         }
     });
