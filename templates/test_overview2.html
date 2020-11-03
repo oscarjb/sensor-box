@@ -139,11 +139,23 @@
           </tr>
           <tr>
             <th>Slough</th>
-            <td>{{ test.Slough }}</td>
+            <td>      
+              {% if test.Segmented_leftImage_s %}
+                  <a href="/images/{{ test.Segmented_leftImage_s }}">{{ test.Slough }}</a>
+              {% else %}
+                  <p>None</p>
+              {% endif %}
+          </td>
           </tr>
           <tr>
             <th>Necrosis</th>
-            <td>{{ test.Necrosis }}</td>
+            <td>      
+              {% if test.Segmented_leftImage_n %}
+                  <a href="/images/{{ test.Segmented_leftImage_n }}">{{ test.Necrosis }}</a>
+              {% else %}
+                  <p>None</p>
+              {% endif %}
+          </td>
           </tr>
               <th>Delete</th>
               <td><a href="{% url "remove_test" patient_id=patient.id test_id=test.id %}"><i class="glyphicon glyphicon-minus-sign"></i></a></td>

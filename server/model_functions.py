@@ -129,7 +129,7 @@ def consumer(cond, image,test):
         r_g = results_g[0]
 
         print(" Detection of granulation:  Done")
-        print(r_g)
+        #print(r_g)
         masks_granulation  =np.zeros((r_g['masks'].shape[0], r_g['masks'].shape[1]))
         for i in range(len(r_g['class_ids'])):
             masks_granulation = masks_granulation +r_g['masks'][:,:,i]
@@ -152,7 +152,7 @@ def consumer(cond, image,test):
         print(" Storing segmented granulation:  Done")
         
         test.TissueTypes = ''
-        test.TissueTypes =  test.TissueTypes + 'Granulation'
+        
         
 
         print(" Measuring percentage of Granulation:  Start")
@@ -182,7 +182,8 @@ def consumer(cond, image,test):
         print(Percentage_g)
 
 
-        
+        if (Percentage_g>0):
+            test.TissueTypes =  test.TissueTypes + 'Granulation'
         
         test.Granulation =  str("{:.2f}".format(Percentage_g)) + ' %'
         '''
@@ -201,7 +202,131 @@ def consumer(cond, image,test):
 
         test_upp = imageio.imsave('test_upp.png', masks_UPP.astype(int))             
         print(" Measuring percentage of Granulation:  Done")
+
+
+
+
+################################## Slough classification & percentage ################################################
+        yellow = [1.0,1.0,0.0] # Yellow for Slough
+        masked_s = image.copy()
+        model_slough.load_weights(os.path.join(os.getcwd(),"../Slough_model/mask_rcnn_type_0050.h5"), by_name=True)
+        results_s = model_slough.detect([image])
+        r_s = results_s[0]
+
+        print(" Detection of Slough:  Done")
+        #print(r_s)
+        masks_slough  =np.zeros((r_s['masks'].shape[0], r_s['masks'].shape[1]))
+        for i in range(len(r_s['class_ids'])):
+            masks_slough = masks_slough +r_s['masks'][:,:,i]
+
+        masks_slough[masks_slough >=1 ] = 1
+        for c in range(3):
+            masked_s[:, :, c] = np.where(masks_slough.astype(int) == 1,
+                                  masked_s[:, :, c] *
+                                  (1 - alpha) + alpha * yellow[c]* 255,
+                                  masked_s[:, :, c])
+
+        print(" Segmentation of Slough:  Done")
+
+        image_store_db_s = imageio.imsave('server/static/images/tests/'+ pathnn + '_segmented_s.png', masked_s) 
+        test.Segmented_leftImage_s = 'tests/' + pathnn + '_segmented_s.png'
+        print(" Storing segmented Slough:  Done")
+        
+        
+        
+        
+
+        print(" Measuring percentage of Slough:  Start")
+        number_s= 0
+        number_upp=sum(sum(masks_UPP.astype(int)))
+        
+        union_s = masks_UPP.astype(int) + masks_slough.astype(int)
+        zeross_s = np.zeros((union_s.shape[0],union_s.shape[1]))
+        intersection_s = sum(sum(np.where(union_s==2 , union_s, zeross_s)))
+        print(intersection_s)
+        
+        if number_upp!=0:            
+            Percentage_s = intersection_s *100 / (2*number_upp)
+        else: 
+            Percentage_s = 0
+        
+        print(Percentage_s)
+
+        if (Percentage_s>0):
+            test.TissueTypes =  test.TissueTypes + ' Slough'
+        
+        
+        test.Slough =  str("{:.2f}".format(Percentage_s)) + ' %'
+             
+        test_s = imageio.imsave('test_s.png', np.where(union_s==2 , union_s, zeross_s).astype(int)) 
+
+               
+        print(" Measuring percentage of Slough:  Done")
+
+
+
+################################## Necrosis classification & percentage ################################################
+        purple = [0.15,0.0,0.4] # Purple for Necrosis
+        masked_n = image.copy()
+        model_necrosis.load_weights(os.path.join(os.getcwd(),"../Necrosis_model/mask_rcnn_type_0040.h5"), by_name=True)
+        results_n = model_necrosis.detect([image])
+        r_n = results_n[0]
+
+        print(" Detection of Necrosis:  Done")
+        #print(r_s)
+        masks_necrosis  =np.zeros((r_n['masks'].shape[0], r_n['masks'].shape[1]))
+        for i in range(len(r_n['class_ids'])):
+            masks_necrosis = masks_necrosis +r_n['masks'][:,:,i]
+
+        masks_necrosis[masks_necrosis >=1 ] = 1
+        for c in range(3):
+            masked_n[:, :, c] = np.where(masks_necrosis.astype(int) == 1,
+                                  masked_n[:, :, c] *
+                                  (1 - alpha) + alpha * purple[c]* 255,
+                                  masked_n[:, :, c])
+
+        print(" Segmentation of Necrosis:  Done")
+
+        image_store_db_n = imageio.imsave('server/static/images/tests/'+ pathnn + '_segmented_n.png', masked_n) 
+        test.Segmented_leftImage_n = 'tests/' + pathnn + '_segmented_n.png'
+        print(" Storing segmented Necrosis:  Done")
+        
+        
+        
+        
+
+        print(" Measuring percentage of Necrosis:  Start")
+        number_n= 0
+        number_upp=sum(sum(masks_UPP.astype(int)))
+        
+        union_n = masks_UPP.astype(int) + masks_necrosis.astype(int)
+        zeross_n = np.zeros((union_n.shape[0],union_n.shape[1]))
+        intersection_n = sum(sum(np.where(union_n==2 , union_n, zeross_n)))
+        print(intersection_n)
+        
+        if number_upp!=0:            
+            Percentage_n = intersection_n *100 / (2*number_upp)
+        else: 
+            Percentage_n = 0
+        
+        print(Percentage_n)
+
+        if (Percentage_n>0):
+            test.TissueTypes =  test.TissueTypes + ' Necrosis'
+        
+        
+        test.Necrosis =  str("{:.2f}".format(Percentage_n)) + ' %'
+             
+        test_n = imageio.imsave('test_n.png', np.where(union_n==2 , union_n, zeross_n).astype(int)) 
+
+               
+        print(" Measuring percentage of Necrosis:  Done")
+
+
         ################################## Saving the patient data ################################################
+        if (test.TissueTypes == ''):
+            test.TissueTypes = 'None'
+        
         test.save()
         #print(r['class_ids'])
         cond.wait(0.1)
@@ -255,6 +380,12 @@ with tf.device(DEVICE):
     model_granulation = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR,
                             config=config_g)
 
+with tf.device(DEVICE):
+    model_slough = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR,
+                            config=config_g)
+with tf.device(DEVICE):
+    model_necrosis = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR,
+                            config=config_g)
 
 def segment(image,test):
     condition = threading.Condition()
