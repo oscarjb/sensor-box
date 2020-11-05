@@ -41,7 +41,7 @@ def search_users(request, patient_id):
     context['profile'] = Doctor.objects.all().get(user=request.user)
     context['patient'] = Patient.objects.all().get(id=patient_id)
     context['tests'] = Test.objects.all().filter(patient_id=patient_id)
-    #print(context)
+    print(context)
     return render(request, "patient_profile.html", context)
 
 @login_required(login_url='login_register')
@@ -52,6 +52,7 @@ def search_tests(request, patient_id, test_id):
     context['patient'] = Patient.objects.all().get(id=patient_id)
     test = Test.objects.all().get(id=test_id)
     context['test'] = test
+    
     data_test = {}
     print(test.camera_kurokesu)
 

@@ -117,3 +117,5 @@ server/__pycache__/model_functions.cpython-36.pyc
 # **/migrations/**
 # !**/migrations
 # !**/migrations/__init__.py
+
+server/static/images/tests/
