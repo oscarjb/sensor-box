@@ -34,8 +34,8 @@ import imageio
 import colorsys
 import cv2
 import scipy
-
-
+import mpldatacursor
+#import imutils
 
 config = balloon.FoodConfig()
 config_g = granulation.FoodConfig()
@@ -231,7 +231,7 @@ def get_ticks(edge) :
 model_maskRCNN.load_weights(os.path.join(os.getcwd(),"../../type20200227T1718/mask_rcnn_type_0040.h5"), by_name=True)
 image =  Image.open('/home/evida/Documents/Sensorbox_V2/sensor-box/server/static/images/tests/image2.jpg')
 width, height = image.size
-image2 = image.resize((int(width/4), int(height/4)), PIL.Image.ANTIALIAS)
+image2 = image.resize((int(width/4), int(height/4)), PIL.Image.NEAREST)
 results = model_maskRCNN.detect([np.array(image2)])
 r = results[0]
 
@@ -255,7 +255,7 @@ print(np.array(ruler_dilation).shape)
 only_Ruler = np.array(image2).copy()
 only_Ruler[np.array(ruler_dilation) == 0,:] = 0
 only_Ruler[np.array(ruler_dilation) != 0,:] = np.array(image2)[np.array(ruler_dilation) != 0]
-
+#only_Ruler_rotated = imutils.rotate(only_Ruler, 20)
 
 test_ruler = imageio.imsave('test_ruler.png',only_Ruler) 
 
@@ -264,10 +264,32 @@ lsd = cv2.createLineSegmentDetector(0)
 
 #Detect lines in the image
 
-lines, width, angles = get_ticks(cv2.cvtColor(np.array(only_Ruler), cv2.COLOR_BGR2GRAY))
+lines, width, angles = get_ticks(cv2.cvtColor(np.array(only_Ruler_rotated), cv2.COLOR_BGR2GRAY))
 
 lines, width, angles = get_parallels(lines, width, angles, min_angle=5)
-print(lines)
+
+for i in range(len(lines)):
+    x1= lines[i][0]
+    y1= lines[i][1]
+    x2= lines[i][2]
+    y2= lines[i][3]
+    cv2.line(only_Ruler_rotated, (x1, y1), (x2, y2), (255,0, 0), thickness=1)
+
+test_ruler = imageio.imsave('test_ruler_rotated.png',only_Ruler_rotated) 
+
+
+'''
+fig, ax = plt.subplots()
+im = ax.imshow(np.array(only_Ruler), interpolation='none')
+mpldatacursor.datacursor(hover=True, bbox=dict(alpha=1, fc='w'))
+plt.show()
+
+'''
+
+print(width[0:20])
+plt.hist(width)
+plt.show()
+
 #ticks_img, dists = get_tick_distance(np.array(only_Ruler), lines, width)
 #print(ticks_img, dists)
 '''

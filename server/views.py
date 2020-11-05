@@ -269,7 +269,7 @@ def analyze_data(request):
     print(test)
     image2 = Image.open(os.path.join('server/static/images/', str(test.camera_kurokesu).replace('\\', '/') ))
     width, height = image2.size
-    image2 = image2.resize((int(width/4), int(height/4)), PIL.Image.ANTIALIAS)
+    image2 = image2.resize((int(width/4), int(height/4)), PIL.Image.NEAREST)
     response_thread = segment(np.array(image2),test)
     print(response_thread)
     if (response_thread["status"] == "Finished"):
