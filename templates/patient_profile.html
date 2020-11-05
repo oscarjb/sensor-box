@@ -12,108 +12,172 @@
 {% block content %}
     <div class="right_col" role="main" style="min-height: 936px">
             <div class="col-md-12 col-sm-12 col-xs-12">
-            <div class="x_title">
-                <h2>{{ patient.name }} <a href="{% url "edit_patient" patient_id=patient.id %}"><i class="fa fa-gear"></i><span
-                        class="fa"></span></a>
-                </h2>
-            <div class="clearfix">
-                <table id="datatable" class="table table-striped table-bordered" style="border-collapse: collapse; border-spacing: 0;">
-                    <thead>
-                        <!--
-                        <colgroup>
-                            <col span="2" style="background-color: green">
-                            <col span="3" style="background-color:rgb(230, 230, 141)">
-                            <col span="1" style="background-color: green">
-                            <col span="1" style="background-color:rgb(230, 230, 141)">
-                            <col span="1" style="background-color: green">
-                            <col span="5" style="background-color:rgb(230, 230, 141)">
-                            <col span="1" style="background-color: green">
-                        </colgroup
-                        -->
-                      <tr>
-                          <th>{% trans 'Date' %}</th>
-                          <th>{% trans 'Outcome' %}</th>
-                          <th>{% trans 'Right image' %}</th>
-                          <th>{% trans 'Left Image' %}</th>
-                          <th>{% trans 'Thermal image' %}</th>
-                          <th>{% trans 'Number of PIs' %}</th> 
-                          <th>{% trans 'Tissue types' %}</th>
-                          <th>{% trans 'Ruler' %}</th>
-                          <th>{% trans 'Perimeter' %}</th>
-                          <th>{% trans 'Area' %}</th>
-                          <th>{% trans 'Granulation' %}</th>
-                          <th>{% trans 'Slough' %}</th>
-                          <th>{% trans 'Necrosis' %}</th>
-                          <th>{% trans 'Delete' %}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                        {% for test in tests %}
-                            
+                <div class="x_title">
+                    <h2>{{ patient.name }} <a href="{% url "edit_patient" patient_id=patient.id %}"><i class="fa fa-gear"></i><span
+                            class="fa"></span></a>
+                    </h2>
+                    <div class="clearfix">
+                        <table id="datatable" class="table table-striped table-bordered" style="border-collapse: collapse; border-spacing: 0;">
+                            <thead>
+                                <!--
+                                <colgroup>
+                                    <col span="2" style="background-color: green">
+                                    <col span="3" style="background-color:rgb(230, 230, 141)">
+                                    <col span="1" style="background-color: green">
+                                    <col span="1" style="background-color:rgb(230, 230, 141)">
+                                    <col span="1" style="background-color: green">
+                                    <col span="5" style="background-color:rgb(230, 230, 141)">
+                                    <col span="1" style="background-color: green">
+                                </colgroup
+                                -->
                             <tr>
-                                
-                                <td style="width: 30%"><a href="{% url "search_tests" patient_id=patient.id test_id=test.id %}">
-                                    {{ test.date.year }}/{{ test.date.month }}/{{ test.date.day }}-{{ test.date.hour }}:{{ test.date.second }}
-                                </a></td>
-                                <td>{{ test.outcome }}</td>
-                                <td>
-                                    {% if test.camera_rasp %}
-                                        <a href="/images/{{ test.camera_rasp }}">{{ test.ImageRight }}</a>
-                                    {% else %}
-                                        <strike><p>Image</p></strike>
-                                    {% endif %}
-                                </td>
-                                <td>      
-                                    {% if test.Segmented_leftImage %}
-                                        <a href="/images/{{ test.Segmented_leftImage }}">{{ test.ImageLeft }}</a>
-                                    {% elif test.camera_kurokesu %}    
-                                        <a href="/images/{{ test.camera_kurokesu }}">{{ test.ImageLeft }}</a>   
-                                    {% else %}
-                                        <strike><p>Image</p></strike>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if test.thermal_camera %}
-                                        <a href="/images/{{ test.thermal_camera }}">{{ test.Imagetherm }}</a>
-                                    {% else %}
-                                        <strike><p>Image</p></strike>
-                                    {% endif %}
-                                </td>
-                                <td>{{ test.NumberUlcers }}</td>
-                                <td>{{ test.TissueTypes }}</td>
-                                <td>{{ test.Ruler }}</td>
-                                <td>{{ test.Perimeter }}</td>
-                                <td>{{ test.Area }}</td>
-                                <td>      
-                                    {% if test.Segmented_leftImage_g %}
-                                        <a href="/images/{{ test.Segmented_leftImage_g }}">{{ test.Granulation }}</a>
-                                    {% else %}
-                                        <p>None</p>
-                                    {% endif %}
-                                </td>
-                                <td>      
-                                    {% if test.Segmented_leftImage_s %}
-                                        <a href="/images/{{ test.Segmented_leftImage_s }}">{{ test.Slough }}</a>
-                                    {% else %}
-                                        <p>None</p>
-                                    {% endif %}
-                                </td>
-                                <td>      
-                                    {% if test.Segmented_leftImage_n %}
-                                        <a href="/images/{{ test.Segmented_leftImage_n }}">{{ test.Necrosis }}</a>
-                                    {% else %}
-                                        <p>None</p>
-                                    {% endif %}
-                                </td>
-                                <td><a href="{% url "remove_test" patient_id=patient.id test_id=test.id %}"><i class="glyphicon glyphicon-minus-sign"></i></a></td>
+                                <th>{% trans 'Date' %}</th>
+                                <th>{% trans 'Outcome' %}</th>
+                                <th>{% trans 'Right image' %}</th>
+                                <th>{% trans 'Left Image' %}</th>
+                                <th>{% trans 'Thermal image' %}</th>
+                                <th>{% trans 'Number of PIs' %}</th> 
+                                <th>{% trans 'Tissue types' %}</th>
+                                <th>{% trans 'Ruler' %}</th>
+                                <th>{% trans 'Perimeter' %}</th>
+                                <th>{% trans 'Area' %}</th>
+                                <th>{% trans 'Granulation' %}</th>
+                                <th>{% trans 'Slough' %}</th>
+                                <th>{% trans 'Necrosis' %}</th>
+                                <th>{% trans 'Delete' %}</th>
                             </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+                            </thead>
+                            <tbody>
+                                {% for test in tests %}
+                                    
+                                    <tr>
+                                        
+                                        <td style="width: 30%"><a href="{% url "search_tests" patient_id=patient.id test_id=test.id %}">
+                                            {{ test.date.year }}/{{ test.date.month }}/{{ test.date.day }}-{{ test.date.hour }}:{{ test.date.second }}
+                                        </a></td>
+                                        <td>{{ test.outcome }}</td>
+                                        <td>
+                                            {% if test.camera_rasp %}
+                                                <a href="/images/{{ test.camera_rasp }}">{{ test.ImageRight }}</a>
+                                            {% else %}
+                                                <strike><p>Image</p></strike>
+                                            {% endif %}
+                                        </td>
+                                        <td>      
+                                            {% if test.Segmented_leftImage %}
+                                                <a href="/images/{{ test.Segmented_leftImage }}">{{ test.ImageLeft }}</a>
+                                            {% elif test.camera_kurokesu %}    
+                                                <a href="/images/{{ test.camera_kurokesu }}">{{ test.ImageLeft }}</a>   
+                                            {% else %}
+                                                <strike><p>Image</p></strike>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if test.thermal_camera %}
+                                                <a href="/images/{{ test.thermal_camera }}">{{ test.Imagetherm }}</a>
+                                            {% else %}
+                                                <strike><p>Image</p></strike>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ test.NumberUlcers }}</td>
+                                        <td>{{ test.TissueTypes }}</td>
+                                        <td>{{ test.Ruler }}</td>
+                                        <td>{{ test.Perimeter }}</td>
+                                        <td>{{ test.Area }}</td>
+                                        <td>      
+                                            {% if test.Segmented_leftImage_g %}
+                                                <a href="/images/{{ test.Segmented_leftImage_g }}">{{ test.Granulation }}</a>
+                                            {% else %}
+                                                <p>None</p>
+                                            {% endif %}
+                                        </td>
+                                        <td>      
+                                            {% if test.Segmented_leftImage_s %}
+                                                <a href="/images/{{ test.Segmented_leftImage_s }}">{{ test.Slough }}</a>
+                                            {% else %}
+                                                <p>None</p>
+                                            {% endif %}
+                                        </td>
+                                        <td>      
+                                            {% if test.Segmented_leftImage_n %}
+                                                <a href="/images/{{ test.Segmented_leftImage_n }}">{{ test.Necrosis }}</a>
+                                            {% else %}
+                                                <p>None</p>
+                                            {% endif %}
+                                        </td>
+                                        <td><a href="{% url "remove_test" patient_id=patient.id test_id=test.id %}"><i class="glyphicon glyphicon-minus-sign"></i></a></td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+            <div>
+                <canvas id="line-grahp" width="800" height="450"></canvas>
+            </div>
     </div>
+    <script src="/static/vendors/moment/min/moment.min.js"></script>
+    <script src="/static/vendors/Chart.js/dist/Chart.js"></script>
+    <script type="text/javascript">
+        let data_g = []
+        let data_s = []
+        let data_n = []
+        {% for test in tests %}
+            granulation = "{{ test.Granulation }}"
+            slough = "{{ test.Slough }}"
+            necrosis = "{{ test.Necrosis }}"
+            granulation = parseFloat(granulation.match(/[\d\.]+/))
+            slough = parseFloat(slough.match(/[\d\.]+/))
+            necrosis = parseFloat(necrosis.match(/[\d\.]+/))
+            date = "{{ test.date|date:'Y-m-d H:i:s' }}";
+            console.log(date)
+            data_g.push({
+                "x": date,
+                "y": granulation
+            }) 
+            data_s.push({
+                "x": date,
+                "y": slough
+            })
+            data_n.push({
+                "x": date,
+                "y": necrosis
+            }) 
+            console.log(granulation, slough, necrosis, date)
+        {% endfor %}
+        
+        console.log(data_g)
+        let granulationData = {
+        label: 'Granulation',
+        borderColor: 'red',
+        data: data_g
+        };
+
+        let sloughData = {
+        label: 'Slough',
+        borderColor: 'yellow',
+        data: data_s 
+        };
+
+        let necrosisData = {
+        label: 'Necrosis',
+        borderColor: 'purple',
+        data: data_n 
+        };
+
+        new Chart(document.getElementById("line-grahp"), {
+            type: 'line',
+            data: { datasets: [granulationData, sloughData, necrosisData] },
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: 'time'
+                    }]
+                }
+            }
+        });
+    </script>
 {% endblock content %}
 
 {% block javascripts %}
