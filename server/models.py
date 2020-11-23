@@ -67,7 +67,7 @@ class Test(models.Model):
     Segmented_leftImage_g = models.ImageField(blank=True)
     Segmented_leftImage_s = models.ImageField(blank=True)
     Segmented_leftImage_n = models.ImageField(blank=True)
-    edited_image = models.CharField(max_length=100)    
+    edited_image = models.ImageField(upload_to='tests/')
 
     def __str__(self):
         return str(self.date)

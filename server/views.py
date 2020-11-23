@@ -13,7 +13,6 @@ import json
 import ast
 from .model_functions import *
 import os
-import imageio
 
 import PIL 
 from PIL import Image
@@ -285,12 +284,19 @@ def save_image(request):
     response['status'] = "failed"
     if request.method == 'POST':
         try:
-            test_id = request.POST.get('test_id', None)
-            test_path = request.POST.get('path', None)
-            print ("test_path", test_path)
-            test = Test.objects.all().get(id=test_id)
-            test.edited_image = test_path  
-            test.save()
+            myfile = request.FILES['file']
+            
+            # Delete imagen
+            if os.path.isfile("server/static/images/edited/" + myfile.name):
+                os.remove("server/static/images/edited/" + myfile.name)
+            else:
+                print ("File not exist")
+
+            # Store imagen
+            fs = FileSystemStorage()
+            name_path = "edited/" + myfile.name
+            fs.save(name_path, myfile)
+            
             response['status'] = "success"
         except Exception as e:
             print("Exception ocurred - " + str(e))

@@ -302,7 +302,14 @@
             
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal" id = "download-image" onclick="saveImage()">Download</button>
-              <button id="saveEditImage" type="button" class="btn btn-primary" >Save changes</button>    
+              <div class="container">
+                <form method="post" action="" enctype="multipart/form-data" id="myform">
+                    <div >
+                        <input type="file" id="file" name="file" />
+                        <input type="button" class="btn btn-secondary" value="Upload" id="but_upload">
+                    </div>
+                </form>
+              </div>    
             </div>  
           </div>
           
@@ -433,6 +440,29 @@
             success: function(result){
               console.log(result)              
           }});
+        });
+        $("#but_upload").click(function(){
+          var fd = new FormData();
+          var files = $('#file')[0].files[0];
+          fd.append('file',files);
+          $.ajax({
+              url: '/ajax/save_image/',
+              type: 'POST',
+              data: fd,
+              contentType: false,
+              processData: false,
+              success: function(response){
+                console.log(response)       
+                /*  
+                if(response != 0){
+                      $("#img").attr("src",response); 
+                      $(".preview img").show(); // Display image element
+                  }else{
+                      alert('file not uploaded');
+                  }
+                */
+              },
+          });
         });
     </script>
     <script type="text/javascript">
