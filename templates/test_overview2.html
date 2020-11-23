@@ -302,7 +302,7 @@
             
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal" id = "download-image" onclick="saveImage()">Download</button>
-              <button type="button" class="btn btn-primary" >Save changes</button>
+              <button id="saveEditImage" type="button" class="btn btn-primary" >Save changes</button>    
             </div>  
           </div>
           
@@ -401,7 +401,6 @@
             {% endfor %}
     </script>
     <script type="text/javascript">
-      $(document).ready(function(){
         $("#showContent").click(function(){
           console.log("starting Analyze")
           $("#loading").show();
@@ -421,7 +420,20 @@
               
           }});
         });
-      });
+        $("#saveEditImage").click(function(){
+          console.log("Save Image")
+          $.ajax({
+            type: "POST",
+            url: "/ajax/save_image/",
+            data: {
+              "test_id": {{ test.id }},
+              "path": "edited/edited_image.png"
+            },
+            dataType: 'json',
+            success: function(result){
+              console.log(result)              
+          }});
+        });
     </script>
     <script type="text/javascript">
       let granulation = "{{ test.Granulation }}";

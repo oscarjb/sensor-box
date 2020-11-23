@@ -45,7 +45,7 @@ class Test(models.Model):
     gas_sensors = JSONField(null=True, blank=True)
     distance = models.FloatField(blank=True, default=0.0)
     temperature = JSONField(null=True, blank=True)
-    camera_kurokesu = models.ImageField(upload_to='tests/', blank=True)
+    camera_kurokesu = models.ImageField(upload_to='tests/', blank=True)    
     camera_rasp = models.ImageField(upload_to='tests/', blank=True)
     thermal_camera = models.ImageField(upload_to='tests/', blank=True)
     patient = models.ForeignKey(Patient, null=True, blank=True, on_delete=models.CASCADE)
@@ -67,5 +67,7 @@ class Test(models.Model):
     Segmented_leftImage_g = models.ImageField(blank=True)
     Segmented_leftImage_s = models.ImageField(blank=True)
     Segmented_leftImage_n = models.ImageField(blank=True)
+    edited_image = models.CharField(max_length=100)    
+
     def __str__(self):
         return str(self.date)
