@@ -13,7 +13,8 @@ import json
 import ast
 from .model_functions import *
 import os
-
+import base64
+from django.core.files.base import ContentFile
 import PIL 
 from PIL import Image
 
@@ -284,19 +285,24 @@ def save_image(request):
     response['status'] = "failed"
     if request.method == 'POST':
         try:
-            myfile = request.FILES['file']
+            image_64 = request.POST.get('image', None)
+            test_id = request.POST.get('test_id', None)
+            patient_id = request.POST.get('patient_id', None)            
+            test = Test.objects.all().get(id=test_id)
             
+            name_photo = "myphoto" + "_" + patient_id + "_" + test_id + ".png"
             # Delete imagen
-            if os.path.isfile("server/static/images/edited/" + myfile.name):
-                os.remove("server/static/images/edited/" + myfile.name)
+            if os.path.isfile("server/static/images/edited/" + name_photo):
+                os.remove("server/static/images/edited/" + name_photo)
             else:
                 print ("File not exist")
-
-            # Store imagen
-            fs = FileSystemStorage()
-            name_path = "edited/" + myfile.name
-            fs.save(name_path, myfile)
             
+            # Store imagen
+            format, imgstr = image_64.split(';base64,') 
+            data = ContentFile(base64.b64decode(imgstr))  
+            file_name = name_photo
+            test.edited_image.save(file_name, data, save=True)
+
             response['status'] = "success"
         except Exception as e:
             print("Exception ocurred - " + str(e))

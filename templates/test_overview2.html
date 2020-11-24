@@ -302,14 +302,7 @@
             
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal" id = "download-image" onclick="saveImage()">Download</button>
-              <div class="container">
-                <form method="post" action="" enctype="multipart/form-data" id="myform">
-                    <div >
-                        <input type="file" id="file" name="file" />
-                        <input type="button" class="btn btn-secondary" value="Upload" id="but_upload">
-                    </div>
-                </form>
-              </div>    
+              <button type="button" class="btn btn-secondary" id="but_upload">Upload</button>
             </div>  
           </div>
           
@@ -339,11 +332,10 @@
       </div>
       -->
     </div>
-       
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/static/vendors/Chart.js/dist/Chart.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="/static/js/jquery.magnific-popup.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
 
             function dynamicColors() {
@@ -427,40 +419,19 @@
               
           }});
         });
-        $("#saveEditImage").click(function(){
-          console.log("Save Image")
-          $.ajax({
-            type: "POST",
-            url: "/ajax/save_image/",
-            data: {
-              "test_id": {{ test.id }},
-              "path": "edited/edited_image.png"
-            },
-            dataType: 'json',
-            success: function(result){
-              console.log(result)              
-          }});
-        });
         $("#but_upload").click(function(){
-          var fd = new FormData();
-          var files = $('#file')[0].files[0];
-          fd.append('file',files);
+          let image64 = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
           $.ajax({
               url: '/ajax/save_image/',
               type: 'POST',
-              data: fd,
-              contentType: false,
-              processData: false,
+              data: {
+                "image": image64,
+                "test_id": {{ test.id }},
+                "patient_id": {{patient.id }}
+              },
+              dataType: 'json',
               success: function(response){
                 console.log(response)       
-                /*  
-                if(response != 0){
-                      $("#img").attr("src",response); 
-                      $(".preview img").show(); // Display image element
-                  }else{
-                      alert('file not uploaded');
-                  }
-                */
               },
           });
         });
