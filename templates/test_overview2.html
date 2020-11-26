@@ -210,13 +210,13 @@
               <div id="color-panel">
                 <div class="btn-group">
                   
-                  <button class="btn" type="button" data-color="red" title="Red" style="background-color:red">
+                  <button id= "red_color" class="btn" type="button" data-color="red" title="Red" style="background-color:red">
                   </button>
-                  <button class="btn" type="button"  data-color="purple" title="Purple" style="background-color:purple">	
+                  <button id= "purple_color" class="btn" type="button"  data-color="purple" title="Purple" style="background-color:purple">	
                   </button>         
-                  <button class="btn" type="button" title="Yellow"  data-color="yellow" style="background-color:yellow">	
+                  <button id= "yellow_color" class="btn" type="button" title="Yellow"  data-color="yellow" style="background-color:yellow">	
                   </button>
-                  <button class="btn" type="button" title="Blue"  data-color="blue" style="background-color:blue">	
+                  <button id= "blue_color" class="btn" type="button" title="Blue"  data-color="blue" style="background-color:blue">	
                   </button>            
                                          
                 </div>
@@ -1190,12 +1190,47 @@
       function buttonSelected(button_id){
         console.log("Button selected", button_id);
         if (button_id == "edit_ulcer_button"){
-          document.getElementById("edit_t_types_button").disabled = true;
-          document.getElementById("edit_t_types_button").disabled = true;
+          console.log($(edit_ulcer_collapse).attr("aria-expanded"))
+          if($(edit_ulcer_collapse).attr("aria-expanded") == 'true') {
+            // do smth
+            console.log("aqui")
+            document.getElementById("edit_t_types_button").disabled = false;
+            document.getElementById("give_distance_button").disabled = false; 
+            document.getElementById('red_color').style.visibility = 'visible';
+            document.getElementById('purple_color').style.visibility = 'visible';
+            document.getElementById('yellow_color').style.visibility = 'visible';    
+          }else{
+            console.log("aca")
+            document.getElementById("edit_t_types_button").disabled = true;
+            document.getElementById("give_distance_button").disabled = true;
+            document.getElementById('red_color').style.visibility = 'hidden';
+            document.getElementById('purple_color').style.visibility = 'hidden';
+            document.getElementById('yellow_color').style.visibility = 'hidden';
+          }
         }else if(button_id == "edit_t_types_button"){
-
+          if($(edit_tissue_types).attr("aria-expanded") == 'true') {
+            document.getElementById("edit_ulcer_button").disabled = false;
+            document.getElementById("give_distance_button").disabled = false;
+            document.getElementById('blue_color').style.visibility = 'visible';
+          }else{
+            document.getElementById("edit_ulcer_button").disabled = true;
+            document.getElementById("give_distance_button").disabled = true;
+            document.getElementById('blue_color').style.visibility = 'hidden';
+          }
         }else if(button_id == "give_distance_button"){
-          
+          if($(give_distance_collapse).attr("aria-expanded") == 'true') {
+            document.getElementById("edit_ulcer_button").disabled = false;
+            document.getElementById("edit_t_types_button").disabled = false;
+            document.getElementById('red_color').style.visibility = 'visible';
+            document.getElementById('purple_color').style.visibility = 'visible';
+            document.getElementById('yellow_color').style.visibility = 'visible';    
+          }else{
+            document.getElementById("edit_ulcer_button").disabled = true;
+            document.getElementById("edit_t_types_button").disabled = true;
+            document.getElementById('red_color').style.visibility = 'hidden';
+            document.getElementById('purple_color').style.visibility = 'hidden';
+            document.getElementById('yellow_color').style.visibility = 'hidden';
+          }
         }
       }
     </script>    
