@@ -211,15 +211,12 @@
                 <div class="btn-group">
                   
                   <button class="btn" type="button" data-color="red" title="Red" style="background-color:red">
+                  </button>
+                  <button class="btn" type="button"  data-color="purple" title="Purple" style="background-color:purple">	
                   </button>         
                   <button class="btn" type="button" title="Yellow"  data-color="yellow" style="background-color:yellow">	
                   </button>          
-                  <button class="btn" type="button"  data-color="purple" title="Purple" style="background-color:purple">	
-                  </button>               
-                  <button class="btn" type="button" title="Black"  data-color="black" style="background-color:black">	
-                  </button>     
-                  
-                  
+                                         
                 </div>
       
               </div>	
@@ -245,58 +242,86 @@
                 <div id="sketch" style="width: 664px; height: 384px;">
                   <canvas id="canvas"></canvas>
                 </div>
-      
+                        
                 <div id="paint-panel">
-      
-                  <div class="btn-group">
-                    <button class="btn" type="button" data-divbtn="pencil" title="Pencil">
-                      <div class="fa fa-pencil"></div>
+                  <p>
+                    <button style="width: 100%;" class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#edit_ulcer_collapse" aria-expanded="false" aria-controls="edit_ulcer_collapse">
+                      Edit Ulcer
                     </button>
-      
-                    <button class="btn" type="button" data-divbtn="line" title="Line">
-                      <b class="">&nbsp;|</b>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="eraser" title="Eraser">
-                      <div class="fa fa-eraser"></i>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="square" title="Square">
-                      <div class="fa fa-square-o"></div>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="fill" title="Fill">
-                      <div class="fa fa-tint"></div>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="circle" title="Circle">
-                      &nbsp;<div class="fa fa-circle-o"></div>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="text" title="Text">
-                      <div class="fa fa-font"></div>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="ellipse" title="Ellipse">
-                      <div class="fa fa-opera"></div>
-                    </button>
-      
+                  </p>
+                  <div class="collapse" id="edit_ulcer_collapse">
+                    <div class="btn-group">
+                      <button class="btn" type="button" data-divbtn="pencil" title="Pencil">
+                        <div class="fa fa-pencil"></div>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="line" title="Line">
+                        <b class="">&nbsp;|</b>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="eraser" title="Eraser">
+                        <div class="fa fa-eraser"></i>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="square" title="Square">
+                        <div class="fa fa-square-o"></div>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="fill" title="Fill">
+                        <div class="fa fa-tint"></div>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="circle" title="Circle">
+                        &nbsp;<div class="fa fa-circle-o"></div>
+                      </button>
+        
+                      <!--<button class="btn" type="button" data-divbtn="text" title="Text">
+                        <div class="fa fa-font"></div>
+                      </button>
+                      -->  
+                      <!--<button class="btn" type="button" data-divbtn="ellipse" title="Ellipse">
+                        <div class="fa fa-opera"></div>
+                      </button>
+                      -->
+                      
+                      
+                    </div>
                     
-                    
+                    <form id="choose-size">
+                      <div class="title">pick size</div>
+                      <div class="radio-group">
+                        <input type="radio" name="size" value="1">1</div>
+                      <div class="radio-group">
+                        <input type="radio" name="size" value="2" checked="checked">2</div>
+                      <div class="radio-group"><input type="radio" name="size" value="3">3</div>
+                      <div class="radio-group"><input type="radio" name="size" value="4">4</div>
+                    </form>
                   </div>
-      
-                  <form id="choose-size">
-                    <div class="title">pick size</div>
-                    <div class="radio-group">
-                      <input type="radio" name="size" value="1">1</div>
-                    <div class="radio-group">
-                      <input type="radio" name="size" value="2" checked="checked">2</div>
-                    <div class="radio-group"><input type="radio" name="size" value="3">3</div>
-                    <div class="radio-group"><input type="radio" name="size" value="4">4</div>
-                  </form>
-      
-                </div>		
-      
+                  <p>
+                    <button style="width: 100%;" class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#give_distance_collapse" aria-expanded="false" aria-controls="give_distance_collapse">
+                      Give Distance
+                    </button>
+                  </p>
+                  <div class="collapse" id="give_distance_collapse">
+                    <input style = "width: 100%" type="text" name="distance_ulcer" id="distance_ulcer">
+                    <form id="choose-unit-measurement">
+                      <div  style="margin-left: 40%"><input type="radio" name="size" value="2" checked="checked">cm</div>
+                      <div  style="margin-left: 40%"><input type="radio" name="size" value="2" checked="checked">in</div>
+                    </form>
+                    <div class="btn-group">
+                      
+
+                      <button class="btn" type="button" data-divbtn="pencil" title="Pencil">
+                        <div class="fa fa-pencil"></div>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="line" title="Line">
+                        <b class="">&nbsp;|</b>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                  		
               </div>	
             </div>
             
