@@ -287,10 +287,14 @@ def save_image(request):
         try:
             image_64 = request.POST.get('image', None)
             test_id = request.POST.get('test_id', None)
-            patient_id = request.POST.get('patient_id', None)            
+            patient_id = request.POST.get('patient_id', None)
+            column = request.POST.get('column', None)            
+            distance = request.POST.get('distance', None)
+            unit_measure = request.POST.get('unit_measure', None)
+
             test = Test.objects.all().get(id=test_id)
-            
-            name_photo = "myphoto" + "_" + patient_id + "_" + test_id + ".png"
+
+            name_photo = "myphoto" + "_" + patient_id + "_" + test_id + "_" + column + ".png"
             # Delete imagen
             if os.path.isfile("server/static/images/edited/" + name_photo):
                 os.remove("server/static/images/edited/" + name_photo)
@@ -301,9 +305,20 @@ def save_image(request):
             format, imgstr = image_64.split(';base64,') 
             data = ContentFile(base64.b64decode(imgstr))  
             file_name = name_photo
-            test.edited_image.save(file_name, data, save=True)
-
-            response['status'] = "success"
+            if column == "ulcer":
+                test.ulcer_edited_image.save(file_name, data, save=True)
+                response['status'] = "success"    
+            elif column == "tissueTypes":
+                test.tissueTypes_edited_image.save(file_name, data, save=True)
+                response['status'] = "success"    
+            elif column == "giveDistance":
+                test.giveDistance_edited_image.save(file_name, data, save=True)
+                print(distance + " " + unit_measure)
+                test.distance_ulcer = distance + " " + unit_measure
+                test.save()
+                response['status'] = "success"    
+            
+            
         except Exception as e:
             print("Exception ocurred - " + str(e))
             response['status'] = "Exception ocurred - " + str(e)

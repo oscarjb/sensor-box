@@ -353,10 +353,10 @@
                     Give Distance
                   </button>
                   <div class="collapse" id="give_distance_collapse">
-                    <input style = "width: 100%" type="text" name="distance_ulcer" id="distance_ulcer">
+                    <input style = "width: 100%" type="number" name="distance_ulcer" id="distance_ulcer">
                     <form id="choose-unit-measurement">
-                      <div  style="margin-left: 40%"><input type="radio" name="size" value="2" checked="checked">cm</div>
-                      <div  style="margin-left: 40%"><input type="radio" name="size" value="2" checked="checked">in</div>
+                      <div  style="margin-left: 40%"><input type="radio" name="size" value="cm" checked="checked" id="cm">cm</div>
+                      <div  style="margin-left: 40%"><input type="radio" name="size" value="in" checked="checked" id="inches">in</div>
                     </form>
                     <div class="btn-group">
                       
@@ -495,20 +495,56 @@
           }});
         });
         $("#but_upload").click(function(){
-          let image64 = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
-          $.ajax({
+          
+          let edit_ulcer_button = document.getElementById("edit_ulcer_button").disabled;
+          let edit_t_types_button = document.getElementById("edit_t_types_button").disabled;
+          let give_distance_button = document.getElementById("give_distance_button").disabled;
+          let giveDistance = "";
+          let cm = ""
+          let inches = ""
+          let column = "";
+          let unit_measure = "";
+          if(!edit_ulcer_button){
+            column = "ulcer"
+          }else if(!edit_t_types_button){
+            column = "tissueTypes"
+          }
+          else if(!give_distance_button){
+            column = "giveDistance"
+            giveDistance = document.getElementById("distance_ulcer").value
+            if (giveDistance == ""){
+              giveDistance = 0
+            }
+            if (cm != document.getElementById("cm").checked){
+              cm = document.getElementById("cm").value  
+              unit_measure = cm
+            }else {
+              inches = document.getElementById("inches").value
+              unit_measure = inches
+            }
+          }
+          console.log("unit_measure", unit_measure)
+          if (column != ""){
+            let image64 = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
+            $.ajax({
               url: '/ajax/save_image/',
               type: 'POST',
               data: {
                 "image": image64,
+                "column": column,
                 "test_id": {{ test.id }},
-                "patient_id": {{patient.id }}
+                "patient_id": {{patient.id }},
+                "distance" : giveDistance,
+                "unit_measure" : unit_measure,
               },
               dataType: 'json',
               success: function(response){
                 console.log(response)       
               },
-          });
+            });
+          }else{
+            console.log("No column selected");
+          }
         });
     </script>
     <script type="text/javascript">
@@ -1190,17 +1226,14 @@
       function buttonSelected(button_id){
         console.log("Button selected", button_id);
         if (button_id == "edit_ulcer_button"){
-          console.log($(edit_ulcer_collapse).attr("aria-expanded"))
           if($(edit_ulcer_collapse).attr("aria-expanded") == 'true') {
             // do smth
-            console.log("aqui")
             document.getElementById("edit_t_types_button").disabled = false;
             document.getElementById("give_distance_button").disabled = false; 
             document.getElementById('red_color').style.visibility = 'visible';
             document.getElementById('purple_color').style.visibility = 'visible';
             document.getElementById('yellow_color').style.visibility = 'visible';    
           }else{
-            console.log("aca")
             document.getElementById("edit_t_types_button").disabled = true;
             document.getElementById("give_distance_button").disabled = true;
             document.getElementById('red_color').style.visibility = 'hidden';
