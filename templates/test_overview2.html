@@ -504,12 +504,12 @@
           let inches = ""
           let column = "";
           let unit_measure = "";
-          if(!edit_ulcer_button){
+          if(!edit_ulcer_button && edit_t_types_button && give_distance_button){
             column = "ulcer"
-          }else if(!edit_t_types_button){
+          }else if(edit_ulcer_button && !edit_t_types_button && give_distance_button){
             column = "tissueTypes"
           }
-          else if(!give_distance_button){
+          else if(edit_ulcer_button && edit_t_types_button && !give_distance_button){
             column = "giveDistance"
             giveDistance = document.getElementById("distance_ulcer").value
             if (giveDistance == ""){
@@ -523,7 +523,7 @@
               unit_measure = inches
             }
           }
-          console.log("unit_measure", unit_measure)
+          console.log("column", column)
           if (column != ""){
             let image64 = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
             $.ajax({
