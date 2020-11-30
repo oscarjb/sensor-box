@@ -279,6 +279,22 @@ def analyze_data(request):
         context = {"status": "working"}
         return JsonResponse(context)
 
+def update_data(request):
+    #if request.method == 'POST':
+    test_id = request.GET.get('test_id', None)
+    test = Test.objects.all().get(id=test_id)
+    image2 = Image.open(os.path.join('server/static/images/', str(test.camera_kurokesu).replace('\\', '/') ))
+    print("image2", 'server/static/images/', str(test.camera_kurokesu).replace('\\', '/') )
+    width, height = image2.size
+    image2 = image2.resize((int(width/4), int(height/4)), PIL.Image.ANTIALIAS)
+    response_thread = segment(np.array(image2),test)
+    print(response_thread)
+    if (response_thread["status"] == "Finished"):
+        return JsonResponse(response_thread)
+    else:
+        context = {"status": "working"}
+        return JsonResponse(context)      
+
 @csrf_exempt
 def save_image(request):
     response = {}

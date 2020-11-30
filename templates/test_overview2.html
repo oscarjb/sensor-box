@@ -100,6 +100,9 @@
         <button style="background: #2A3F54;" type="button" id="launch-paint" class="btn btn-primary" data-toggle="modal" data-target="#paint-modal">
           Launch Paint
         </button>
+        <button style="background: #2A3F54;" type="button" id="update-data" class="btn btn-primary">
+          Update Data
+        </button>
         <div id = "loading"  class="lds-facebook"><div></div><div></div><div></div></div>
       </div>
       <div class="container">
@@ -494,6 +497,30 @@
               
           }});
         });
+
+
+
+        $("#update-data").click(function(){
+          console.log("starting update data")
+          $("#loading").show();
+          $('#update-data').prop('disabled', true);
+          $.ajax({
+            url: "/ajax/update_data/",
+            data: {
+              'test_id': {{ test.id }}
+            },
+            dataType: 'json',
+            success: function(result){
+              console.log(result)
+              if (result.status == "Finished"){
+                $("#loading").hide();
+                $('#update-data').prop('disabled', false);
+              }
+              
+          }});
+        });
+
+
         $("#but_upload").click(function(){
           
           let edit_ulcer_button = document.getElementById("edit_ulcer_button").disabled;
