@@ -71,6 +71,10 @@ class Test(models.Model):
     tissueTypes_edited_image = models.ImageField(upload_to='edited/', blank=True)
     giveDistance_edited_image = models.ImageField(upload_to='edited/', blank=True)
     distance_ulcer = models.CharField(max_length=10, choices=opciones, default="0")
-    
+    Pixels_in_UPP = models.CharField(max_length=20, choices=opciones, default="0")
+    Pixels_in_g = models.CharField(max_length=20, choices=opciones, default="0")
+    Pixels_in_s = models.CharField(max_length=20, choices=opciones, default="0")
+    Pixels_in_n = models.CharField(max_length=20, choices=opciones, default="0")
+
     def __str__(self):
         return str(self.date)

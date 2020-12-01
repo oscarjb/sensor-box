@@ -17,7 +17,7 @@ import base64
 from django.core.files.base import ContentFile
 import PIL 
 from PIL import Image
-
+#from os import path
 
 
 
@@ -282,18 +282,59 @@ def analyze_data(request):
 def update_data(request):
     #if request.method == 'POST':
     test_id = request.GET.get('test_id', None)
+    patient_id = request.GET.get('patient_id', None)
+    print ("test_id is: ", test_id, " and patient_id is: ", patient_id)
     test = Test.objects.all().get(id=test_id)
-    image2 = Image.open(os.path.join('server/static/images/', str(test.camera_kurokesu).replace('\\', '/') ))
-    print("image2", 'server/static/images/', str(test.camera_kurokesu).replace('\\', '/') )
-    width, height = image2.size
-    image2 = image2.resize((int(width/4), int(height/4)), PIL.Image.ANTIALIAS)
-    response_thread = segment(np.array(image2),test)
+    pathn = str(test.camera_kurokesu)
+    start = pathn.find('test') + 6
+    end = pathn.find('.jpg', start)
+    pathnn = pathn[start:end]
+
+
+    name_photo_upp = str(pathnn + "_" + patient_id + "_" + test_id + "_" + "ulcer" + ".png")
+    name_photo_tissues = str(pathnn + "_" + patient_id + "_" + test_id + "_" + "tissueTypes" + ".png")
+    name_photo_distance = str(pathnn + "_" + patient_id + "_" + test_id + "_" + "giveDistance" + ".png")
+
+    response_thread = segment_edited(name_photo_upp,name_photo_tissues,name_photo_distance,test)
     print(response_thread)
     if (response_thread["status"] == "Finished"):
         return JsonResponse(response_thread)
     else:
         context = {"status": "working"}
-        return JsonResponse(context)      
+        return JsonResponse(context)
+
+    # name_photo_upp = str(pathnn + "_" + patient_id + "_" + test_id + "_" + "ulcer" + ".png")
+    # print ('server/static/images/' + name_photo_upp)
+    # if(os.path.exists(os.path.join('server/static/images/edited/' + name_photo_upp ))):
+    #     print("Edited ULCER Exists")
+    #     image_edited_ulcer = Image.open((os.path.join('server/static/images/edited/' + name_photo_upp )))
+    #     image_edited_ulcer = image_edited_ulcer.resize((640, 360), PIL.Image.ANTIALIAS)
+    #     response_thread = segment_edited_ulcer(np.array(image2),test)
+    # else: 
+    #     print("Edited ULCER DOES NOT Exist")
+    
+
+    # name_photo_tissues = str(pathnn + "_" + patient_id + "_" + test_id + "_" + "tissueTypes" + ".png")
+    # if(os.path.exists(os.path.join('server/static/images/edited/' + name_photo_tissues ))):
+    #     print("Edited ULCER Exists")
+    #     image_edited_tissues = Image.open((os.path.join('server/static/images/edited/' + name_photo_tissues )))
+    #     image_edited_tissues = image_edited_tissues.resize((640, 360), PIL.Image.ANTIALIAS)
+    #     response_thread = segment_edited_tissues(np.array(image2),test)
+    # else: 
+    #     print("Edited ULCER DOES NOT Exist")
+
+
+    # name_photo_distance = str(pathnn + "_" + patient_id + "_" + test_id + "_" + "giveDistance" + ".png")
+    # if(os.path.exists(os.path.join('server/static/images/edited/' + name_photo_distance ))):
+    #     print("Edited ULCER Exists")
+    #     image_edited_distance = Image.open((os.path.join('server/static/images/edited/' + name_photo_distance )))
+    #     image_edited_distance = image_edited_distance.resize((640, 360), PIL.Image.ANTIALIAS)
+    #     response_thread = image_edited_distance(np.array(image2),test)
+    # else: 
+    #     print("Edited ULCER DOES NOT Exist")
+
+
+ 
 
 @csrf_exempt
 def save_image(request):
@@ -309,8 +350,11 @@ def save_image(request):
             unit_measure = request.POST.get('unit_measure', None)
 
             test = Test.objects.all().get(id=test_id)
-
-            name_photo = "myphoto" + "_" + patient_id + "_" + test_id + "_" + column + ".png"
+            pathn = str(test.camera_kurokesu)
+            start = pathn.find('test') + 6
+            end = pathn.find('.jpg', start)
+            pathnn = pathn[start:end]
+            name_photo = pathnn + "_" + patient_id + "_" + test_id + "_" + column + ".png"
             # Delete imagen
             if os.path.isfile("server/static/images/edited/" + name_photo):
                 os.remove("server/static/images/edited/" + name_photo)

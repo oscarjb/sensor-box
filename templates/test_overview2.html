@@ -507,7 +507,8 @@
           $.ajax({
             url: "/ajax/update_data/",
             data: {
-              'test_id': {{ test.id }}
+              'test_id': {{ test.id }},
+              'patient_id': {{patient.id }}
             },
             dataType: 'json',
             success: function(result){
