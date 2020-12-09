@@ -273,11 +273,8 @@ def analyze_data(request):
     image2 = image2.resize((int(width/4), int(height/4)), PIL.Image.ANTIALIAS)
     response_thread = segment(np.array(image2),test)
     print(response_thread)
-    if (response_thread["status"] == "Finished"):
-        return JsonResponse(response_thread)
-    else:
-        context = {"status": "working"}
-        return JsonResponse(context)
+    return JsonResponse(response_thread)
+
 
 def update_data(request):
     #if request.method == 'POST':
@@ -297,11 +294,7 @@ def update_data(request):
 
     response_thread = segment_edited(name_photo_upp,name_photo_tissues,name_photo_distance,test)
     print(response_thread)
-    if (response_thread["status"] == "Finished"):
-        return JsonResponse(response_thread)
-    else:
-        context = {"status": "working"}
-        return JsonResponse(context)
+    return JsonResponse(response_thread)
 
     # name_photo_upp = str(pathnn + "_" + patient_id + "_" + test_id + "_" + "ulcer" + ".png")
     # print ('server/static/images/' + name_photo_upp)

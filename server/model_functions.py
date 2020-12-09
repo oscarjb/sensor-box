@@ -543,6 +543,8 @@ class InferenceConfig(config.__class__):
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
 
+COUNT_PROCESS = 0
+COUNT_PROCESS_EDIT = 0
 DEVICE = "/cpu"
 TEST_MODE = "inference"
 config = InferenceConfig()
@@ -569,10 +571,18 @@ with tf.device(DEVICE):
 
 
 def segment_edited(path_upp,path_tissues, path_distance,test):
+    global COUNT_PROCESS_EDIT
+    if COUNT_PROCESS_EDIT > 2:
+        response = {
+            "status" : "working"
+        }
+        return response
     condition = threading.Condition()
     c1 = threading.Thread(name='c1', target=consumer2,args=(condition, path_upp,path_tissues, path_distance, test, ))
     c1.start()
     c1.join()
+    COUNT_PROCESS_EDIT = COUNT_PROCESS_EDIT - 1
+    #print ("COUNT_PROCESS 2 : "+ str(COUNT_PROCESS))
     response = {
         "status" : "Finished"
     }
@@ -581,10 +591,20 @@ def segment_edited(path_upp,path_tissues, path_distance,test):
     return response
 
 def segment(image,test):
+    global COUNT_PROCESS 
+    if COUNT_PROCESS > 2:
+        response = {
+            "status" : "working"
+        }
+        return response
+
+    COUNT_PROCESS = COUNT_PROCESS + 1
     condition = threading.Condition()
     c1 = threading.Thread(name='c1', target=consumer,args=(condition, image, test, ))
     c1.start()
     c1.join()
+    COUNT_PROCESS = COUNT_PROCESS - 1
+    #print ("COUNT_PROCESS 2 : "+ str(COUNT_PROCESS))
     response = {
         "status" : "Finished"
     }

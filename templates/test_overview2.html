@@ -494,6 +494,11 @@
                 $("#loading").hide();
                 $('#showContent').prop('disabled', false);
               }
+              if (result.status == "working"){
+                $("#loading").hide();
+                $('#showContent').prop('disabled', false);
+                setTimeout(function(){ alert("Resources bussy, try later"); }, 100);
+              }
               
           }});
         });
@@ -517,7 +522,11 @@
                 $("#loading").hide();
                 $('#update-data').prop('disabled', false);
               }
-              
+              if (result.status == "working"){
+                $("#loading").hide();
+                $('#showContent').prop('disabled', false);
+                setTimeout(function(){ alert("Resources bussy, try later"); }, 100);
+              }
           }});
         });
 
