@@ -1190,6 +1190,7 @@
         uctx.clearRect(0, 0, canvas.width, canvas.height);
         uctx.drawImage(canvas, 0, 0);
         undo_canvas[undo_canvas_top]['redoable'] = false;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       });
 
 
@@ -1224,11 +1225,13 @@
         if (!undo_canvas[prev].redoable) {
           console.log(undo_canvas_top+' prev='+prev);
           var ucan = undo_canvas[prev]['ucan'];
+          console.log(ucan)
           ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
           ctx.drawImage(ucan, 0, 0);
           undo_canvas[undo_canvas_top].redoable = true;
           undo_canvas_top = prev;
-        }
+        } 
       });
 
       $('#redo-tool').on('click', function(){
