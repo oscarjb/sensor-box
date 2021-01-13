@@ -28,6 +28,8 @@ import threading
 import time
 import imageio
 import colorsys
+
+import PIL 
 from PIL import Image
 
 def random_colors(N, bright=True):
@@ -160,11 +162,14 @@ def consumer(cond, image,test):
         number_upp=sum(sum(masks_UPP.astype(int)))
         
         print(number_upp)
+        test.Pixels_in_UPP = number_upp
+
         print(sum(sum(masks_granulation.astype(int))))
         union = masks_UPP.astype(int) + masks_granulation.astype(int)
         zeross = np.zeros((union.shape[0],union.shape[1]))
         intersection = sum(sum(np.where(union==2 , union, zeross)))
         print(intersection)
+        test.Pixels_in_g = intersection/2
         '''
         for i in range(masks_UPP.shape[0]):
             for j in range(masks_UPP.shape[1]):
@@ -202,6 +207,7 @@ def consumer(cond, image,test):
 
         test_upp = imageio.imsave('test_upp.png', masks_UPP.astype(int))             
         print(" Measuring percentage of Granulation:  Done")
+
 
 
 
@@ -244,7 +250,7 @@ def consumer(cond, image,test):
         zeross_s = np.zeros((union_s.shape[0],union_s.shape[1]))
         intersection_s = sum(sum(np.where(union_s==2 , union_s, zeross_s)))
         print(intersection_s)
-        
+        test.Pixels_in_s = intersection_s/2
         if number_upp!=0:            
             Percentage_s = intersection_s *100 / (2*number_upp)
         else: 
@@ -302,6 +308,7 @@ def consumer(cond, image,test):
         union_n = masks_UPP.astype(int) + masks_necrosis.astype(int)
         zeross_n = np.zeros((union_n.shape[0],union_n.shape[1]))
         intersection_n = sum(sum(np.where(union_n==2 , union_n, zeross_n)))
+        
         print(intersection_n)
         
         if number_upp!=0:            
@@ -324,6 +331,178 @@ def consumer(cond, image,test):
 
 
         ################################## Saving the patient data ################################################
+        if (test.TissueTypes == ''):
+            test.TissueTypes = 'None'
+        
+        test.save()
+        #print(r['class_ids'])
+        cond.wait(0.1)
+        logging.debug('Resource is available to consumer')
+
+
+
+def consumer2(cond, path_upp, path_tissues,path_distance,test):
+    """wait for the condition and use the resource"""
+    logging.debug('Starting consumer thread')
+    with cond:
+
+        image2 = Image.open(os.path.join('server/static/images/', str(test.camera_kurokesu).replace('\\', '/') ))
+        print("image2", 'server/static/images/', str(test.camera_kurokesu).replace('\\', '/') )
+        image2 = np.array(image2.resize((640,360), PIL.Image.ANTIALIAS))
+        if(os.path.exists(os.path.join('server/static/images/edited/' + path_upp ))):
+            print("Edited ULCER Exists")
+            image_edited_ulcer = Image.open((os.path.join('server/static/images/edited/' + path_upp )))
+            image_edited_ulcer = np.array(image_edited_ulcer.resize((640, 360), PIL.Image.ANTIALIAS))
+            mask_upp=np.zeros([640, 360])
+            red = [1.0,0.0,0.0] # Red for UPP 
+            alpha=0.5
+            reds=np.array(image_edited_ulcer)[:,:,0]
+            greens=np.array(image_edited_ulcer)[:,:,1]
+            blues=np.array(image_edited_ulcer)[:,:,2]
+            mask_upp = (reds == 0) & (greens ==0 ) &  (blues ==255)
+            mask_ulcer = np.where(mask_upp, 1, 0)
+            sum_of_pixels_in_UPP = sum(sum(mask_ulcer.astype(int)))
+            test.Pixels_in_UPP = sum_of_pixels_in_UPP
+            masked_UPP = image2.copy()
+            for c in range(3):
+                masked_UPP[:, :, c] = np.where(mask_upp.astype(int) == 1,
+                                  masked_UPP[:, :, c] *
+                                  (1 - alpha) + alpha * red[c]* 255,
+                                  masked_UPP[:, :, c])
+
+            print(" Segmentation of edited upp :  Done")
+            pathn = str(test.camera_kurokesu)
+            start = pathn.find('test') + 6
+            end = pathn.find('.jpg', start)
+            pathnn = pathn[start:end]
+            image_store_db = imageio.imsave('server/static/images/tests/'+ pathnn + '_segmented_edited.png', masked_UPP) 
+            test.Segmented_leftImage = 'tests/' + pathnn + '_segmented_edited.png'
+
+
+        else:
+            image_edited_ulcer = Image.open((os.path.join('server/static/images/edited/' + path_upp )))
+            image_edited_ulcer = np.array(image_edited_ulcer.resize((640, 360), PIL.Image.ANTIALIAS))
+            print("Edited ULCER DOES NOT Exist")
+            #sum_of_pixels_in_UPP = test.Pixels_in_UPP
+            model_maskRCNN.load_weights(os.path.join(os.getcwd(),"../type20200227T1718/mask_rcnn_type_0040.h5"), by_name=True)
+
+            results = model_maskRCNN.detect([image_edited_ulcer])
+            r = results[0]
+            
+            masked_image = image_edited_ulcer.copy()
+            index_upp = [] 
+            for i in range(0, len(r['class_ids'])) : 
+                if r['class_ids'][i] == 1 : 
+                    index_upp.append(i)
+            mask_upp = np.zeros((r['masks'].shape[0], r['masks'].shape[1]))
+            
+            for i in range(len(index_upp)):
+                mask_pp = mask_upp +r['masks'][:,:,index_upp[i]]
+            mask_upp[mask_upp >=1 ] = 1
+
+
+
+        if(os.path.exists(os.path.join('server/static/images/edited/' + path_tissues ))):
+            print("Edited Tissues Exists")
+            test.TissueTypes = ''
+            red= [1.0,0.0,0.0] # red for granulation
+            yellow = [1.0,1.0,0.0] # Yellow for Slough
+            purple = [0.15,0.0,0.4] # Purple for Necrosis
+            image_edited_ulcer = Image.open((os.path.join('server/static/images/edited/' + path_tissues )))
+            image_edited_ulcer =  np.array(image_edited_ulcer.resize((640, 360), PIL.Image.ANTIALIAS))
+            mask_g=np.zeros([640, 360])
+            mask_n=np.zeros([640, 360])
+            mask_s=np.zeros([640, 360])
+            reds=np.array(image_edited_ulcer)[:,:,0]
+            greens=np.array(image_edited_ulcer)[:,:,1]
+            blues=np.array(image_edited_ulcer)[:,:,2]
+            mask_g = (reds == 255) & (greens ==0 ) &  (blues ==0)
+            mask_s = (reds == 255) & (greens ==255 ) &  (blues ==0)
+            mask_n = (reds == 128) & (greens ==0 ) &  (blues ==128)
+            mask_granulation = np.where(mask_g, 1, 0)
+            mask_slough = np.where(mask_s, 1, 0)
+            mask_necrosis = np.where(mask_n, 1, 0)
+            sum_of_pixels_in_g = sum(sum(mask_ulcer.astype(int)))
+            sum_of_pixels_in_s = sum(sum(mask_ulcer.astype(int)))
+            sum_of_pixels_in_n = sum(sum(mask_ulcer.astype(int)))
+
+            test.Pixels_in_g = sum_of_pixels_in_g
+            test.Pixels_in_s = sum_of_pixels_in_s
+            test.Pixels_in_n = sum_of_pixels_in_n
+
+            union_g = mask_upp.astype(int) + mask_granulation.astype(int)
+            union_s = mask_upp.astype(int) + mask_slough.astype(int)
+            union_n = mask_upp.astype(int) + mask_necrosis.astype(int)
+            zeross_g = np.zeros((union_g.shape[0],union_g.shape[1]))
+            zeross_s = np.zeros((union_s.shape[0],union_s.shape[1]))
+            zeross_n = np.zeros((union_n.shape[0],union_n.shape[1]))
+            intersection_n = sum(sum(np.where(union_g==2 , union_g, zeross_g)))
+            intersection_g = sum(sum(np.where(union_s==2 , union_s, zeross_s)))
+            intersection_s = sum(sum(np.where(union_n==2 , union_n, zeross_n)))
+            
+            print(intersection_g)
+            print(intersection_s)
+            print(intersection_n)
+            
+            if test.Pixels_in_UPP!=0:            
+                Percentage_g = intersection_g *100 / (2*test.Pixels_in_UPP)
+                Percentage_s = intersection_s *100 / (2*test.Pixels_in_UPP)
+                Percentage_n = intersection_n *100 / (2*test.Pixels_in_UPP)
+            else: 
+                Percentage_g = 0
+                Percentage_s = 0
+                Percentage_n = 0
+            test.Granulation =  str("{:.2f}".format(Percentage_g)) + ' %'
+            test.Slough =  str("{:.2f}".format(Percentage_s)) + ' %'
+            test.Necrosis =  str("{:.2f}".format(Percentage_n)) + ' %'
+            print(Percentage_g)
+            print(Percentage_s)
+            print(Percentage_n)
+
+
+            if (Percentage_g>0):
+                test.TissueTypes =  test.TissueTypes + ' Granulation'
+            if (Percentage_s>0):
+                test.TissueTypes =  test.TissueTypes + ' Slough'
+            if (Percentage_n>0):
+                test.TissueTypes =  test.TissueTypes + ' Necrosis'
+
+
+            masked_Granulation = image2.copy()
+            masked_Slough = image2.copy()
+            masked_Necrosis = image2.copy()
+            for c in range(3):
+                masked_Granulation[:, :, c] = np.where(mask_granulation.astype(int) == 1,
+                                  masked_Granulation[:, :, c] *
+                                  (1 - alpha) + alpha * red[c]* 255,
+                                  masked_Granulation[:, :, c])
+                masked_Slough[:, :, c] = np.where(mask_slough.astype(int) == 1,
+                                  masked_Slough[:, :, c] *
+                                  (1 - alpha) + alpha * yellow[c]* 255,
+                                  masked_Slough[:, :, c])
+                masked_Necrosis[:, :, c] = np.where(mask_necrosis.astype(int) == 1,
+                                  masked_Necrosis[:, :, c] *
+                                  (1 - alpha) + alpha * purple[c]* 255,
+                                  masked_Necrosis[:, :, c])
+
+            print(" Segmentation of edited tissues :  Done")
+            pathn = str(test.camera_kurokesu)
+            start = pathn.find('test') + 6
+            end = pathn.find('.jpg', start)
+            pathnn = pathn[start:end]
+            image_store_db_g = imageio.imsave('server/static/images/tests/'+ pathnn + '_segmented_g_edited.png', masked_Granulation) 
+            test.Segmented_leftImage_g = 'tests/' + pathnn + '_segmented_g_edited.png'
+            image_store_db_s = imageio.imsave('server/static/images/tests/'+ pathnn + '_segmented_s_edited.png', masked_Slough) 
+            test.Segmented_leftImage_s = 'tests/' + pathnn + '_segmented_s_edited.png'
+            image_store_db_n = imageio.imsave('server/static/images/tests/'+ pathnn + '_segmented_n_edited.png', masked_Necrosis) 
+            test.Segmented_leftImage_n = 'tests/' + pathnn + '_segmented_n_edited.png'
+
+
+
+        # else:
+        #     sum_of_pixels_in_g = test.Pixels_in_g
+        #     sum_of_pixels_in_s = test.Pixels_in_s
+        #     sum_of_pixels_in_n = test.Pixels_in_n
         if (test.TissueTypes == ''):
             test.TissueTypes = 'None'
         
@@ -364,6 +543,8 @@ class InferenceConfig(config.__class__):
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
 
+COUNT_PROCESS = 0
+COUNT_PROCESS_EDIT = 0
 DEVICE = "/cpu"
 TEST_MODE = "inference"
 config = InferenceConfig()
@@ -387,14 +568,48 @@ with tf.device(DEVICE):
     model_necrosis = modellib.MaskRCNN(mode="inference", model_dir=MODEL_DIR,
                             config=config_g)
 
-def segment(image,test):
+
+
+def segment_edited(path_upp,path_tissues, path_distance,test):
+    global COUNT_PROCESS_EDIT
+    if COUNT_PROCESS_EDIT > 2:
+        response = {
+            "status" : "working"
+        }
+        return response
     condition = threading.Condition()
-    c1 = threading.Thread(name='c1', target=consumer,args=(condition, image, test, ))
+    c1 = threading.Thread(name='c1', target=consumer2,args=(condition, path_upp,path_tissues, path_distance, test, ))
     c1.start()
     c1.join()
+    COUNT_PROCESS_EDIT = COUNT_PROCESS_EDIT - 1
+    #print ("COUNT_PROCESS 2 : "+ str(COUNT_PROCESS))
     response = {
         "status" : "Finished"
     }
     #model_maskRCNN.load_weights(os.path.join('server/static/model/mask_rcnn_type_0040.h5'), by_name=True)
     #results = model_maskRCNN.detect([image])
     return response
+
+def segment(image,test):
+    global COUNT_PROCESS 
+    if COUNT_PROCESS > 2:
+        response = {
+            "status" : "working"
+        }
+        return response
+
+    COUNT_PROCESS = COUNT_PROCESS + 1
+    condition = threading.Condition()
+    c1 = threading.Thread(name='c1', target=consumer,args=(condition, image, test, ))
+    c1.start()
+    c1.join()
+    COUNT_PROCESS = COUNT_PROCESS - 1
+    #print ("COUNT_PROCESS 2 : "+ str(COUNT_PROCESS))
+    response = {
+        "status" : "Finished"
+    }
+    #model_maskRCNN.load_weights(os.path.join('server/static/model/mask_rcnn_type_0040.h5'), by_name=True)
+    #results = model_maskRCNN.detect([image])
+    return response
+
+

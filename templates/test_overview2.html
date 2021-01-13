@@ -100,6 +100,9 @@
         <button style="background: #2A3F54;" type="button" id="launch-paint" class="btn btn-primary" data-toggle="modal" data-target="#paint-modal">
           Launch Paint
         </button>
+        <button style="background: #2A3F54;" type="button" id="update-data" class="btn btn-primary">
+          Update Data
+        </button>
         <div id = "loading"  class="lds-facebook"><div></div><div></div><div></div></div>
       </div>
       <div class="container">
@@ -210,16 +213,15 @@
               <div id="color-panel">
                 <div class="btn-group">
                   
-                  <button class="btn" type="button" data-color="red" title="Red" style="background-color:red">
+                  <button id= "red_color" class="btn" type="button" data-color="red" title="Red" style="background-color:red">
+                  </button>
+                  <button id= "purple_color" class="btn" type="button"  data-color="purple" title="Purple" style="background-color:purple">	
                   </button>         
-                  <button class="btn" type="button" title="Yellow"  data-color="yellow" style="background-color:yellow">	
-                  </button>          
-                  <button class="btn" type="button"  data-color="purple" title="Purple" style="background-color:purple">	
-                  </button>               
-                  <button class="btn" type="button" title="Black"  data-color="black" style="background-color:black">	
-                  </button>     
-                  
-                  
+                  <button id= "yellow_color" class="btn" type="button" title="Yellow"  data-color="yellow" style="background-color:yellow">	
+                  </button>
+                  <button id= "blue_color" class="btn" type="button" title="Blue"  data-color="blue" style="background-color:blue">	
+                  </button>            
+                                         
                 </div>
       
               </div>	
@@ -245,64 +247,140 @@
                 <div id="sketch" style="width: 664px; height: 384px;">
                   <canvas id="canvas"></canvas>
                 </div>
-      
+                        
                 <div id="paint-panel">
-      
-                  <div class="btn-group">
-                    <button class="btn" type="button" data-divbtn="pencil" title="Pencil">
-                      <div class="fa fa-pencil"></div>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="line" title="Line">
-                      <b class="">&nbsp;|</b>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="eraser" title="Eraser">
-                      <div class="fa fa-eraser"></i>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="square" title="Square">
-                      <div class="fa fa-square-o"></div>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="fill" title="Fill">
-                      <div class="fa fa-tint"></div>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="circle" title="Circle">
-                      &nbsp;<div class="fa fa-circle-o"></div>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="text" title="Text">
-                      <div class="fa fa-font"></div>
-                    </button>
-      
-                    <button class="btn" type="button" data-divbtn="ellipse" title="Ellipse">
-                      <div class="fa fa-opera"></div>
-                    </button>
-      
+                  
+                  <button style="width: 100%;" id="edit_ulcer_button" onclick="buttonSelected(this.id)" class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#edit_ulcer_collapse" aria-expanded="false" aria-controls="edit_ulcer_collapse">
+                    Edit Ulcer
+                  </button>
+                  <div class="collapse" id="edit_ulcer_collapse">
+                    <div class="btn-group">
+                      <button class="btn" type="button" data-divbtn="pencil" title="Pencil">
+                        <div class="fa fa-pencil"></div>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="line" title="Line">
+                        <b class="">&nbsp;|</b>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="eraser" title="Eraser">
+                        <div class="fa fa-eraser"></i>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="square" title="Square">
+                        <div class="fa fa-square-o"></div>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="fill" title="Fill">
+                        <div class="fa fa-tint"></div>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="circle" title="Circle">
+                        &nbsp;<div class="fa fa-circle-o"></div>
+                      </button>
+        
+                      <!--<button class="btn" type="button" data-divbtn="text" title="Text">
+                        <div class="fa fa-font"></div>
+                      </button>
+                      -->  
+                      <!--<button class="btn" type="button" data-divbtn="ellipse" title="Ellipse">
+                        <div class="fa fa-opera"></div>
+                      </button>
+                      -->
+                      
+                      
+                    </div>
                     
-                    
+                    <form id="choose-size">
+                      <div class="title">pick size</div>
+                      <div class="radio-group">
+                        <input type="radio" name="size" value="1">1</div>
+                      <div class="radio-group">
+                        <input type="radio" name="size" value="2" checked="checked">2</div>
+                      <div class="radio-group"><input type="radio" name="size" value="3">3</div>
+                      <div class="radio-group"><input type="radio" name="size" value="4">4</div>
+                    </form>
                   </div>
-      
-                  <form id="choose-size">
-                    <div class="title">pick size</div>
-                    <div class="radio-group">
-                      <input type="radio" name="size" value="1">1</div>
-                    <div class="radio-group">
-                      <input type="radio" name="size" value="2" checked="checked">2</div>
-                    <div class="radio-group"><input type="radio" name="size" value="3">3</div>
-                    <div class="radio-group"><input type="radio" name="size" value="4">4</div>
-                  </form>
-      
-                </div>		
-      
+                  <button style="width: 100%;" id="edit_t_types_button" onclick="buttonSelected(this.id)" class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#edit_tissue_types" aria-expanded="false" aria-controls="edit_tissue_types">
+                    Edit Tissue Types
+                  </button>
+                  <div class="collapse" id="edit_tissue_types">
+                    <div class="btn-group">
+                      <button class="btn" type="button" data-divbtn="pencil" title="Pencil">
+                        <div class="fa fa-pencil"></div>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="line" title="Line">
+                        <b class="">&nbsp;|</b>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="eraser" title="Eraser">
+                        <div class="fa fa-eraser"></i>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="square" title="Square">
+                        <div class="fa fa-square-o"></div>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="fill" title="Fill">
+                        <div class="fa fa-tint"></div>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="circle" title="Circle">
+                        &nbsp;<div class="fa fa-circle-o"></div>
+                      </button>
+        
+                      <!--<button class="btn" type="button" data-divbtn="text" title="Text">
+                        <div class="fa fa-font"></div>
+                      </button>
+                      -->  
+                      <!--<button class="btn" type="button" data-divbtn="ellipse" title="Ellipse">
+                        <div class="fa fa-opera"></div>
+                      </button>
+                      -->
+                      
+                      
+                    </div>
+                    
+                    <form id="choose-size">
+                      <div class="title">pick size</div>
+                      <div class="radio-group">
+                        <input type="radio" name="size" value="1">1</div>
+                      <div class="radio-group">
+                        <input type="radio" name="size" value="2" checked="checked">2</div>
+                      <div class="radio-group"><input type="radio" name="size" value="3">3</div>
+                      <div class="radio-group"><input type="radio" name="size" value="4">4</div>
+                    </form>
+                  </div>
+                  <button style="width: 100%;" id="give_distance_button" onclick="buttonSelected(this.id)" class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#give_distance_collapse" aria-expanded="false" aria-controls="give_distance_collapse">
+                    Give Distance
+                  </button>
+                  <div class="collapse" id="give_distance_collapse">
+                    <input style = "width: 100%" type="number" name="distance_ulcer" id="distance_ulcer">
+                    <form id="choose-unit-measurement">
+                      <div  style="margin-left: 40%"><input type="radio" name="size" value="cm" checked="checked" id="cm">cm</div>
+                      <div  style="margin-left: 40%"><input type="radio" name="size" value="in" checked="checked" id="inches">in</div>
+                    </form>
+                    <div class="btn-group">
+                      
+
+                      <button class="btn" type="button" data-divbtn="pencil" title="Pencil">
+                        <div class="fa fa-pencil"></div>
+                      </button>
+        
+                      <button class="btn" type="button" data-divbtn="line" title="Line">
+                        <b class="">&nbsp;|</b>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                  		
               </div>	
             </div>
             
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal" id = "download-image" onclick="saveImage()">Download</button>
-              <button type="button" class="btn btn-primary" >Save changes</button>
+              <button type="button" class="btn btn-secondary" id="but_upload">Upload</button>
             </div>  
           </div>
           
@@ -332,11 +410,10 @@
       </div>
       -->
     </div>
-       
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/static/vendors/Chart.js/dist/Chart.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="/static/js/jquery.magnific-popup.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
 
             function dynamicColors() {
@@ -401,7 +478,6 @@
             {% endfor %}
     </script>
     <script type="text/javascript">
-      $(document).ready(function(){
         $("#showContent").click(function(){
           console.log("starting Analyze")
           $("#loading").show();
@@ -418,10 +494,95 @@
                 $("#loading").hide();
                 $('#showContent').prop('disabled', false);
               }
+              if (result.status == "working"){
+                $("#loading").hide();
+                $('#showContent').prop('disabled', false);
+                setTimeout(function(){ alert("Resources bussy, try later"); }, 100);
+              }
               
           }});
         });
-      });
+
+
+
+        $("#update-data").click(function(){
+          console.log("starting update data")
+          $("#loading").show();
+          $('#update-data').prop('disabled', true);
+          $.ajax({
+            url: "/ajax/update_data/",
+            data: {
+              'test_id': {{ test.id }},
+              'patient_id': {{patient.id }}
+            },
+            dataType: 'json',
+            success: function(result){
+              console.log(result)
+              if (result.status == "Finished"){
+                $("#loading").hide();
+                $('#update-data').prop('disabled', false);
+              }
+              if (result.status == "working"){
+                $("#loading").hide();
+                $('#showContent').prop('disabled', false);
+                setTimeout(function(){ alert("Resources bussy, try later"); }, 100);
+              }
+          }});
+        });
+
+
+        $("#but_upload").click(function(){
+          
+          let edit_ulcer_button = document.getElementById("edit_ulcer_button").disabled;
+          let edit_t_types_button = document.getElementById("edit_t_types_button").disabled;
+          let give_distance_button = document.getElementById("give_distance_button").disabled;
+          let giveDistance = "";
+          let cm = ""
+          let inches = ""
+          let column = "";
+          let unit_measure = "";
+          if(!edit_ulcer_button && edit_t_types_button && give_distance_button){
+            column = "ulcer"
+          }else if(edit_ulcer_button && !edit_t_types_button && give_distance_button){
+            column = "tissueTypes"
+          }
+          else if(edit_ulcer_button && edit_t_types_button && !give_distance_button){
+            column = "giveDistance"
+            giveDistance = document.getElementById("distance_ulcer").value
+            if (giveDistance == ""){
+              giveDistance = 0
+            }
+            if (cm != document.getElementById("cm").checked){
+              cm = document.getElementById("cm").value  
+              unit_measure = cm
+            }else {
+              inches = document.getElementById("inches").value
+              unit_measure = inches
+            }
+          }
+          console.log("column", column)
+          if (column != ""){
+            let image64 = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
+            $.ajax({
+              url: '/ajax/save_image/',
+              type: 'POST',
+              data: {
+                "image": image64,
+                "column": column,
+                "test_id": {{ test.id }},
+                "patient_id": {{patient.id }},
+                "distance" : giveDistance,
+                "unit_measure" : unit_measure,
+              },
+              dataType: 'json',
+              success: function(response){
+                console.log(response)       
+              },
+            });
+          }else{
+            console.log("No column selected");
+          }
+        });
     </script>
     <script type="text/javascript">
       let granulation = "{{ test.Granulation }}";
@@ -1038,6 +1199,7 @@
         uctx.clearRect(0, 0, canvas.width, canvas.height);
         uctx.drawImage(canvas, 0, 0);
         undo_canvas[undo_canvas_top]['redoable'] = false;
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       });
 
 
@@ -1072,11 +1234,13 @@
         if (!undo_canvas[prev].redoable) {
           console.log(undo_canvas_top+' prev='+prev);
           var ucan = undo_canvas[prev]['ucan'];
+          console.log(ucan)
           ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
           ctx.drawImage(ucan, 0, 0);
           undo_canvas[undo_canvas_top].redoable = true;
           undo_canvas_top = prev;
-        }
+        } 
       });
 
       $('#redo-tool').on('click', function(){
@@ -1099,6 +1263,49 @@
         a.click()
       }
 
+      function buttonSelected(button_id){
+        console.log("Button selected", button_id);
+        if (button_id == "edit_ulcer_button"){
+          if($(edit_ulcer_collapse).attr("aria-expanded") == 'true') {
+            // do smth
+            document.getElementById("edit_t_types_button").disabled = false;
+            document.getElementById("give_distance_button").disabled = false; 
+            document.getElementById('red_color').style.visibility = 'visible';
+            document.getElementById('purple_color').style.visibility = 'visible';
+            document.getElementById('yellow_color').style.visibility = 'visible';    
+          }else{
+            document.getElementById("edit_t_types_button").disabled = true;
+            document.getElementById("give_distance_button").disabled = true;
+            document.getElementById('red_color').style.visibility = 'hidden';
+            document.getElementById('purple_color').style.visibility = 'hidden';
+            document.getElementById('yellow_color').style.visibility = 'hidden';
+          }
+        }else if(button_id == "edit_t_types_button"){
+          if($(edit_tissue_types).attr("aria-expanded") == 'true') {
+            document.getElementById("edit_ulcer_button").disabled = false;
+            document.getElementById("give_distance_button").disabled = false;
+            document.getElementById('blue_color').style.visibility = 'visible';
+          }else{
+            document.getElementById("edit_ulcer_button").disabled = true;
+            document.getElementById("give_distance_button").disabled = true;
+            document.getElementById('blue_color').style.visibility = 'hidden';
+          }
+        }else if(button_id == "give_distance_button"){
+          if($(give_distance_collapse).attr("aria-expanded") == 'true') {
+            document.getElementById("edit_ulcer_button").disabled = false;
+            document.getElementById("edit_t_types_button").disabled = false;
+            document.getElementById('red_color').style.visibility = 'visible';
+            document.getElementById('purple_color').style.visibility = 'visible';
+            document.getElementById('yellow_color').style.visibility = 'visible';    
+          }else{
+            document.getElementById("edit_ulcer_button").disabled = true;
+            document.getElementById("edit_t_types_button").disabled = true;
+            document.getElementById('red_color').style.visibility = 'hidden';
+            document.getElementById('purple_color').style.visibility = 'hidden';
+            document.getElementById('yellow_color').style.visibility = 'hidden';
+          }
+        }
+      }
     </script>    
 {% endblock content %}
 

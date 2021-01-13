@@ -36,4 +36,6 @@ urlpatterns = [
     path('api/data', recieve_data, name="recieve_data"),
     path('api/login', login_api, name="login_api"),
     url(r'^ajax/analyze_data/$', analyze_data, name='analyze_data'),
+    url(r'^ajax/update_data/$', update_data, name='update_data'),
+    url(r'^ajax/save_image/$', save_image, name='save_image'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
